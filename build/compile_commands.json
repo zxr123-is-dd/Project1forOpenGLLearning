@@ -1,0 +1,56 @@
+[
+{
+  "directory": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/build",
+  "command": "gcc  @CMakeFiles/demo.dir/includes_C.rsp -std=gnu17 -o CMakeFiles\\demo.dir\\external\\glad\\src\\glad.c.obj -c C:\\Users\\zxr_8\\Repository\\Project1forOpenGLLearning\\external\\glad\\src\\glad.c",
+  "file": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/external/glad/src/glad.c",
+  "output": "CMakeFiles/demo.dir/external/glad/src/glad.c.obj"
+},
+{
+  "directory": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/build",
+  "command": "g++  @CMakeFiles/demo.dir/includes_CXX.rsp -std=gnu++20 -o CMakeFiles\\demo.dir\\src\\IndexBuffer.cpp.obj -c C:\\Users\\zxr_8\\Repository\\Project1forOpenGLLearning\\src\\IndexBuffer.cpp",
+  "file": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/src/IndexBuffer.cpp",
+  "output": "CMakeFiles/demo.dir/src/IndexBuffer.cpp.obj"
+},
+{
+  "directory": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/build",
+  "command": "g++  @CMakeFiles/demo.dir/includes_CXX.rsp -std=gnu++20 -o CMakeFiles\\demo.dir\\src\\Shader.cpp.obj -c C:\\Users\\zxr_8\\Repository\\Project1forOpenGLLearning\\src\\Shader.cpp",
+  "file": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/src/Shader.cpp",
+  "output": "CMakeFiles/demo.dir/src/Shader.cpp.obj"
+},
+{
+  "directory": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/build",
+  "command": "g++  @CMakeFiles/demo.dir/includes_CXX.rsp -std=gnu++20 -o CMakeFiles\\demo.dir\\src\\Texture.cpp.obj -c C:\\Users\\zxr_8\\Repository\\Project1forOpenGLLearning\\src\\Texture.cpp",
+  "file": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/src/Texture.cpp",
+  "output": "CMakeFiles/demo.dir/src/Texture.cpp.obj"
+},
+{
+  "directory": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/build",
+  "command": "g++  @CMakeFiles/demo.dir/includes_CXX.rsp -std=gnu++20 -o CMakeFiles\\demo.dir\\src\\VertexArray.cpp.obj -c C:\\Users\\zxr_8\\Repository\\Project1forOpenGLLearning\\src\\VertexArray.cpp",
+  "file": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/src/VertexArray.cpp",
+  "output": "CMakeFiles/demo.dir/src/VertexArray.cpp.obj"
+},
+{
+  "directory": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/build",
+  "command": "g++  @CMakeFiles/demo.dir/includes_CXX.rsp -std=gnu++20 -o CMakeFiles\\demo.dir\\src\\VertexAttrib.cpp.obj -c C:\\Users\\zxr_8\\Repository\\Project1forOpenGLLearning\\src\\VertexAttrib.cpp",
+  "file": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/src/VertexAttrib.cpp",
+  "output": "CMakeFiles/demo.dir/src/VertexAttrib.cpp.obj"
+},
+{
+  "directory": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/build",
+  "command": "g++  @CMakeFiles/demo.dir/includes_CXX.rsp -std=gnu++20 -o CMakeFiles\\demo.dir\\src\\VertexBuffer.cpp.obj -c C:\\Users\\zxr_8\\Repository\\Project1forOpenGLLearning\\src\\VertexBuffer.cpp",
+  "file": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/src/VertexBuffer.cpp",
+  "output": "CMakeFiles/demo.dir/src/VertexBuffer.cpp.obj"
+},
+{
+  "directory": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/build",
+  "command": "g++  @CMakeFiles/demo.dir/includes_CXX.rsp -std=gnu++20 -o CMakeFiles\\demo.dir\\src\\main.cpp.obj -c C:\\Users\\zxr_8\\Repository\\Project1forOpenGLLearning\\src\\main.cpp",
+  "file": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/src/main.cpp",
+  "output": "CMakeFiles/demo.dir/src/main.cpp.obj"
+},
+{
+  "directory": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/build",
+  "command": "g++  @CMakeFiles/demo.dir/includes_CXX.rsp -std=gnu++20 -o CMakeFiles\\demo.dir\\src\\stb_image.cpp.obj -c C:\\Users\\zxr_8\\Repository\\Project1forOpenGLLearning\\src\\stb_image.cpp",
+  "file": "C:/Users/zxr_8/Repository/Project1forOpenGLLearning/src/stb_image.cpp",
+  "output": "CMakeFiles/demo.dir/src/stb_image.cpp.obj"
+}
+]
