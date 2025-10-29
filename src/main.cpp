@@ -266,16 +266,27 @@ int main(int argc, char** argv) {
 
 	shader.Enable();
 
+	// light
 	shader.SetVec3("light.position", lightPos);
-	shader.SetVec3("light.color", glm::vec3(1.0f, 1.0f, 1.0f));
-	shader.SetVec3("light.ambient", glm::vec3(0.1f));
-	shader.SetVec3("light.diffuse", glm::vec3(0.2f));
-	shader.SetVec3("light.specular", glm::vec3(1.0f));
+	// shader.SetVec3("light.direction", glm::vec3(1.0f, 1.0f, 1.0f));
 
-	shader.SetVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
-	shader.SetVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
-	shader.SetVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+	shader.SetVec3("light.color", glm::vec3(1.0f));
+	shader.SetVec3("light.ambient", glm::vec3(0.01f));
+	shader.SetVec3("light.diffuse", glm::vec3(20.0f));
+	shader.SetVec3("light.specular", glm::vec3(40.54f));
+
+	shader.SetFloat("light.constant", 1.0f);
+	shader.SetFloat("light.linear", 0.09f);
+	shader.SetFloat("light.quadratic", 0.032f);
+
+	// material
+	// shader.SetVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
+	// shader.SetVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
+	// shader.SetVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
 	shader.SetFloat("material.shininess", 32.0f);
+
+	// flash light
+	shader.SetVec3("flashLight.color", glm::vec3(3.0f));
 
 	shader.Disable();
 
@@ -301,8 +312,11 @@ int main(int argc, char** argv) {
 		VAO.Bind();
 		shader.Enable();
 		shader.SetVec3("light.position", lightPos);
-		shader.SetVec3("light.color", glm::vec3(1.0f, 1.0f, 1.0f));
 		shader.SetVec3("viewPos", cameraPos);
+
+		shader.SetVec3("flashLight.position", cameraPos);
+		shader.SetVec3("flashLight.direction", cameraFront);
+		shader.SetFloat("flashLight.cutOff", glm::cos(glm::radians(12.5f)));
 
 		for (int i = 0; i < 10; i++) {
 			glm::mat4 model = glm::mat4(1.0f);

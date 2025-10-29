@@ -15,13 +15,27 @@ struct Material {
 
 struct Light {
 	vec3 position;
+	// vec3 direction;
+
 	vec3 color;
 	vec3 diffuse;
 	vec3 specular;
+
+	float constant;
+	float linear;
+	float quadratic;
+};
+
+struct FlashLight {
+	vec3 color;
+	vec3 position;
+	vec3 direction;
+	float cutOff;
 };
 
 uniform Material material;
 uniform Light light;
+uniform FlashLight flashLight;
 
 uniform sampler2D Texture0;
 uniform sampler2D Texture1;
@@ -31,20 +45,31 @@ uniform vec3 viewPos;
 void main() {
 	// ambient
 	vec3 ambient = light.color * vec3(texture(material.diffuse, ourTexCoord));
-	
+
 	// diffuse
-	vec3  norm = normalize(ourNormal);
-	vec3  lightDir = normalize(light.position - FragPos);
+	vec3 norm = normalize(ourNormal);
+	vec3 lightDir = normalize(light.position - FragPos);
+	// vec3 lightDir = normalize(-light.direction);
 	float diff = max(dot(norm, lightDir), 0.0);
-	vec3  diffuse = light.color * light.diffuse * diff * vec3(texture(material.diffuse, ourTexCoord));
+	vec3 diffuse = light.color * light.diffuse * diff * vec3(texture(material.diffuse, ourTexCoord));
 	
 	// specular
-	vec3  viewDir = normalize(viewPos - FragPos);
-	vec3  reflectDir = reflect(-lightDir, norm);
+	vec3 viewDir = normalize(viewPos - FragPos);
+	vec3 reflectDir = reflect(-lightDir, norm);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-	vec3  specular = light.color * light.specular * spec * vec3(texture(material.specular, ourTexCoord));
+	vec3 specular = light.color * light.specular * spec * vec3(texture(material.specular, ourTexCoord));
 
-	vec3 result = ambient + diffuse + specular;
+	// attenuation
+	float distance = length(lightDir) * 40.0f;
+	float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * distance * distance);
+
+	// flash light
+	float theta = dot(flashLight.position - FragPos, normalize(-flashLight.direction));
+	if (theta < flashLight.cutOff) {
+		diffuse = diffuse + flashLight.color * light.diffuse * vec3(texture(material.specular, ourTexCoord));
+	}
+
+	vec3 result = (ambient + diffuse + specular) * attenuation;
 	// FragColor = mix(texture(Texture0, ourTexCoord), texture(Texture1, ourTexCoord), 0.5) * vec4(result, 1.0f);
 	FragColor = vec4(result, 1.0);
 }
