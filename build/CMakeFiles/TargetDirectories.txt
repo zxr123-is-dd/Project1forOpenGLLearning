@@ -1,3 +1,0 @@
-C:/Users/zxr_8/Repository/Project1forOpenGLLearning/build/CMakeFiles/demo.dir
-C:/Users/zxr_8/Repository/Project1forOpenGLLearning/build/CMakeFiles/edit_cache.dir
-C:/Users/zxr_8/Repository/Project1forOpenGLLearning/build/CMakeFiles/rebuild_cache.dir
