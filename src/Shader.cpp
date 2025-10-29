@@ -73,8 +73,7 @@ unsigned int Shader::LoadShader(const std::string& path) const {
 	if (path.find(".vert") != std::string::npos) {
 		type = GL_VERTEX_SHADER;
 		std::cout << "Vertex shader" << std::endl;
-	}
-	else if (path.find(".frag") != std::string::npos) {
+	} else if (path.find(".frag") != std::string::npos) {
 		type = GL_FRAGMENT_SHADER;
 		std::cout << "fragment shader" << std::endl;
 	}
@@ -121,8 +120,9 @@ std::string Shader::ReadFile(const std::string& path) const {
 
 	std::stringstream res;
 	std::string line;
-	while (getline(stream, line))
+	while (getline(stream, line)) {
 		res << line << '\n';
+	}
 
 	return res.str();
 }

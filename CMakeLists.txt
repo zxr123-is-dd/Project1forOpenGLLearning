@@ -26,9 +26,14 @@ set(GLAD_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/external/glad/src/glad.c")
 # glm
 set(GLM_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external/glm/")
 
+# stb_image
+aux_source_directory("${CMAKE_CURRENT_SOURCE_DIR}/external/stb_image" STB_IMAGE_SRC_DIR)
+
+# src
 aux_source_directory("${CMAKE_CURRENT_SOURCE_DIR}/src" SRC_DIR)
 
-add_executable(demo ${GLAD_SOURCE} ${SRC_DIR})
+#build
+add_executable(demo ${GLAD_SOURCE} ${STB_IMAGE_SRC_DIR} ${SRC_DIR})
 
 target_include_directories(demo 
     PRIVATE
