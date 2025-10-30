@@ -271,9 +271,9 @@ int main(int argc, char** argv) {
 	// shader.SetVec3("light.direction", glm::vec3(1.0f, 1.0f, 1.0f));
 
 	shader.SetVec3("light.color", glm::vec3(1.0f));
-	shader.SetVec3("light.ambient", glm::vec3(0.01f));
-	shader.SetVec3("light.diffuse", glm::vec3(20.0f));
-	shader.SetVec3("light.specular", glm::vec3(40.54f));
+	shader.SetVec3("light.ambient", glm::vec3(0.05f));
+	shader.SetVec3("light.diffuse", glm::vec3(0.7f));
+	shader.SetVec3("light.specular", glm::vec3(1.2f));
 
 	shader.SetFloat("light.constant", 1.0f);
 	shader.SetFloat("light.linear", 0.09f);
@@ -286,7 +286,7 @@ int main(int argc, char** argv) {
 	shader.SetFloat("material.shininess", 32.0f);
 
 	// flash light
-	shader.SetVec3("flashLight.color", glm::vec3(3.0f));
+	shader.SetVec3("flashLight.color", glm::vec3(1.0f));
 
 	shader.Disable();
 
