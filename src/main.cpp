@@ -107,6 +107,16 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	cameraFront = glm::normalize(front);
 }
 
+// There is no checker so just use this carefully
+std::string uniformName(const std::string& var, const int& index, const std::string& insideVar) {
+	std::string result = var;
+	result += "[";
+	result += std::to_string(index);
+	result += "].";
+	result += insideVar;
+	return result;
+}
+
 int main(int argc, char** argv) {
 	if (!glfwInit()) {
 		std::cout << "Failed to initialize glfw" << std::endl;
@@ -201,11 +211,12 @@ int main(int argc, char** argv) {
 	};
 
 	glm::vec3 lightPositions[] = {
-		glm::vec3( 0.0f,  0.0f, 10.0f);
-		glm::vec3(10.0f,  0.0f,  0.0f);
-		glm::vec3( 0.0f, 10.0f,  0.0f);
+		glm::vec3( 0.0f,  0.0f, 10.0f),
+		glm::vec3(10.0f,  0.0f,  0.0f),
+		glm::vec3( 0.0f, 10.0f,  0.0f)
 	};
 
+	// Shader
 	VertexArray VAO;
 	VAO.Bind();
 
@@ -238,15 +249,30 @@ int main(int argc, char** argv) {
 	Texture texture3("./res/texture/container2_specular.png", 4);
 	shader.SetInt("material.specular", 3);
 
+	shader.SetFloat("material.shininess", 32.0f);
+
 	glm::mat4 projection = glm::mat4(1.0f);
 	projection = glm::perspective(glm::radians(45.0f), (float)screenWidth / screenHeight, 0.1f, 100.0f);
 
 	shader.SetMat4("projection", projection);
 
+	for (int i = 0; i < 3; i++) {
+		shader.SetVec3(uniformName("pointLights", i, "color"), glm::vec3(1.0));
+		shader.SetVec3(uniformName("pointLights", i, "position"), lightPositions[i]);
+		
+		shader.SetVec3(uniformName("pointLights", i, "ambient"), glm::vec3(0.05f));
+		shader.SetVec3(uniformName("pointLights", i, "diffuse"), glm::vec3(0.7f));
+		shader.SetVec3(uniformName("pointLights", i, "specular"), glm::vec3(0.8f));
+
+		shader.SetFloat(uniformName("pointLights", i, "constant"), 1.0f);
+		shader.SetFloat(uniformName("pointLights", i, "linear"), 0.09f);
+		shader.SetFloat(uniformName("pointLights", i, "quadratic"), 0.032f);
+	}
+
 	VAO.Unbind();
 	shader.Disable();
 
-	// light
+	// lightShader
 	VertexArray lightVAO;
 	lightVAO.Bind();
 
@@ -269,34 +295,6 @@ int main(int argc, char** argv) {
 	lightShader.SetMat4("model", lightModel);
 	lightShader.SetMat4("projection", projection);
 	lightShader.Disable();
-
-	shader.Enable();
-
-	// light
-	shader.SetVec3("light.position", lightPos);
-	// shader.SetVec3("light.direction", glm::vec3(1.0f, 1.0f, 1.0f));
-
-	shader.SetVec3("light.color", glm::vec3(1.0f));
-	shader.SetVec3("light.ambient", glm::vec3(0.05f));
-	shader.SetVec3("light.diffuse", glm::vec3(0.7f));
-	shader.SetVec3("light.specular", glm::vec3(1.2f));
-
-	shader.SetFloat("light.constant", 1.0f);
-	shader.SetFloat("light.linear", 0.09f);
-	shader.SetFloat("light.quadratic", 0.032f);
-
-	// material
-	// shader.SetVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
-	// shader.SetVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
-	// shader.SetVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
-	shader.SetFloat("material.shininess", 32.0f);
-
-	// flash light
-	shader.SetVec3("flashLight.color", glm::vec3(1.0f));
-	shader.SetFloat("flashLight.cutOff", glm::cos(glm::radians(12.5f)));
-	shader.SetFloat("flashLight.outerCutOff", glm::cos(glm::radians(17.5f)));
-
-	shader.Disable();
 
 	float angle = 0.0f, r = 5.0f;
 
@@ -340,7 +338,7 @@ int main(int argc, char** argv) {
 		shader.Disable();
 		
 		lightShader.Enable();
-		lightShader.setMat4("view", view);
+		lightShader.SetMat4("view", view);
 
 		lightModel = glm::mat4(1.0f);
 		lightModel = glm::translate(lightModel, lightPos);

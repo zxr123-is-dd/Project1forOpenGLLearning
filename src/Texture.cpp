@@ -26,7 +26,7 @@ Texture::Texture(const std::string& image, const unsigned int type)
 	}
 
 	glGenTextures(1, &mID);
-	glBindTexture(GL_TEXTURE_2D, mID);
+	glBindTexture(GL_TEXTURE_2D, mID); // The texture has already bind to the state machine
 
 	unsigned char* data = stbi_load(image.c_str(), &mWidth, &mHeight, &mNrChannels, 0);
 	if (data) {

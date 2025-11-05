@@ -20,7 +20,7 @@ struct DirectLight {
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
-}
+};
 
 struct PointLight {
 	vec3 color;
@@ -63,7 +63,7 @@ uniform SpotLight spotLights[NUM_SPOT_LIGHT];
 uniform vec3 viewPos;
 
 vec3 CalcDirectLight(DirectLight light, vec3 normal, vec3 viewDir) {
-	vec3 lightDir = normalize(-light.direct);
+	vec3 lightDir = normalize(-light.direction);
 
 	float diff = max(dot(normal, lightDir), 0.0);
 
@@ -95,7 +95,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
 	return (ambient + diffuse + specular) * light.color * attenuation;
 }
 
-vec3 CalcSpotLight(spotLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
+vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
 	vec3 lightDir = normalize(light.position - fragPos);
 
 	float diff = max(dot(normal, lightDir), 0.0);
@@ -103,7 +103,7 @@ vec3 CalcSpotLight(spotLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
 	vec3 reflectDir = reflect(-lightDir, normal);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 
-	float theta = dot(lightDir, normal(-light.direction));
+	float theta = dot(lightDir, normalize(-light.direction));
 	float epsilon = light.cutOff - light.outerCutOff;
 	float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
 
