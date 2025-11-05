@@ -200,16 +200,22 @@ int main(int argc, char** argv) {
 		glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 
+	glm::vec3 lightPositions[] = {
+		glm::vec3( 0.0f,  0.0f, 10.0f);
+		glm::vec3(10.0f,  0.0f,  0.0f);
+		glm::vec3( 0.0f, 10.0f,  0.0f);
+	};
+
 	VertexArray VAO;
 	VAO.Bind();
 
 	VertexBuffer VBO(vertices, sizeof(vertices));
 
-	VertexAttrib VAt;
-	VAt.Add(0, GL_FLOAT, 3);
-	VAt.Add(1, GL_FLOAT, 2);
-	VAt.Add(2, GL_FLOAT, 3);
-	VAt.SetAttrib();
+	VertexAttrib vertexAttrib;
+	vertexAttrib.Add(0, GL_FLOAT, 3);
+	vertexAttrib.Add(1, GL_FLOAT, 2);
+	vertexAttrib.Add(2, GL_FLOAT, 3);
+	vertexAttrib.SetAttrib();
 
 	IndexBuffer IBO(indices, sizeof(indices));
 
@@ -287,6 +293,8 @@ int main(int argc, char** argv) {
 
 	// flash light
 	shader.SetVec3("flashLight.color", glm::vec3(1.0f));
+	shader.SetFloat("flashLight.cutOff", glm::cos(glm::radians(12.5f)));
+	shader.SetFloat("flashLight.outerCutOff", glm::cos(glm::radians(17.5f)));
 
 	shader.Disable();
 
@@ -316,7 +324,6 @@ int main(int argc, char** argv) {
 
 		shader.SetVec3("flashLight.position", cameraPos);
 		shader.SetVec3("flashLight.direction", cameraFront);
-		shader.SetFloat("flashLight.cutOff", glm::cos(glm::radians(12.5f)));
 
 		for (int i = 0; i < 10; i++) {
 			glm::mat4 model = glm::mat4(1.0f);
@@ -329,11 +336,11 @@ int main(int argc, char** argv) {
 			shader.SetMat4("view", view);
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
+		} 
 		shader.Disable();
 		
 		lightShader.Enable();
-		lightShader.SetMat4("view", view);
+		lightShader.setMat4("view", view);
 
 		lightModel = glm::mat4(1.0f);
 		lightModel = glm::translate(lightModel, lightPos);
