@@ -108,7 +108,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 }
 
 // There is no checker so just use this carefully
-std::string uniformName(const std::string& var, const int& index, const std::string& insideVar) {
+std::string uniform_name(const std::string& var, const int& index, const std::string& insideVar) {
 	std::string result = var;
 	result += "[";
 	result += std::to_string(index);
@@ -211,9 +211,9 @@ int main(int argc, char** argv) {
 	};
 
 	glm::vec3 lightPositions[] = {
-		glm::vec3( 0.0f,  0.0f, 10.0f),
-		glm::vec3(10.0f,  0.0f,  0.0f),
-		glm::vec3( 0.0f, 10.0f,  0.0f)
+		glm::vec3( 0.0f, 0.0f,-7.0f),
+		glm::vec3( 7.0f, 0.0f, 0.0f),
+		glm::vec3( 0.0f, 7.0f, 0.0f)
 	};
 
 	// Shader
@@ -233,21 +233,21 @@ int main(int argc, char** argv) {
 	Shader shader("./res/shader/shader.vert", "./res/shader/shader.frag");
 	shader.Enable();
 
-	glActiveTexture(GL_TEXTURE0);
-	Texture texture0("./res/texture/container.jpg", 3);
-	shader.SetInt("Texture0", 0);
+	// glActiveTexture(GL_TEXTURE0);
+	// Texture texture0("./res/texture/container.jpg", 3);
+	// shader.SetInt("Texture0", 0);
 	
-	glActiveTexture(GL_TEXTURE1);
-	Texture texture1("./res/texture/awesomeface.png", 4);
-	shader.SetInt("Texture1", 1);
+	// glActiveTexture(GL_TEXTURE1);
+	// Texture texture1("./res/texture/awesomeface.png", 4);
+	// shader.SetInt("Texture1", 1);
 
-	glActiveTexture(GL_TEXTURE2);
+	glActiveTexture(GL_TEXTURE0);
 	Texture texture2("./res/texture/container2.png", 4);
-	shader.SetInt("material.diffuse", 2);
+	shader.SetInt("material.diffuse", 0);
 
-	glActiveTexture(GL_TEXTURE3);
+	glActiveTexture(GL_TEXTURE1);
 	Texture texture3("./res/texture/container2_specular.png", 4);
-	shader.SetInt("material.specular", 3);
+	shader.SetInt("material.specular", 1);
 
 	shader.SetFloat("material.shininess", 32.0f);
 
@@ -257,17 +257,32 @@ int main(int argc, char** argv) {
 	shader.SetMat4("projection", projection);
 
 	for (int i = 0; i < 3; i++) {
-		shader.SetVec3(uniformName("pointLights", i, "color"), glm::vec3(1.0));
-		shader.SetVec3(uniformName("pointLights", i, "position"), lightPositions[i]);
+		shader.SetVec3(uniform_name("pointLights", i, "color"), glm::vec3(3.0));
+		shader.SetVec3(uniform_name("pointLights", i, "position"), lightPositions[i]);
+		// std::cout << lightPositions[i].x << " " << lightPositions[i].y << " " << lightPositions[i].z << std::endl;
 		
-		shader.SetVec3(uniformName("pointLights", i, "ambient"), glm::vec3(0.05f));
-		shader.SetVec3(uniformName("pointLights", i, "diffuse"), glm::vec3(0.7f));
-		shader.SetVec3(uniformName("pointLights", i, "specular"), glm::vec3(0.8f));
+		shader.SetVec3(uniform_name("pointLights", i, "ambient"), glm::vec3(0.05f));
+		shader.SetVec3(uniform_name("pointLights", i, "diffuse"), glm::vec3(0.7f));
+		shader.SetVec3(uniform_name("pointLights", i, "specular"), glm::vec3(0.8f));
 
-		shader.SetFloat(uniformName("pointLights", i, "constant"), 1.0f);
-		shader.SetFloat(uniformName("pointLights", i, "linear"), 0.09f);
-		shader.SetFloat(uniformName("pointLights", i, "quadratic"), 0.032f);
+		shader.SetFloat(uniform_name("pointLights", i, "constant"), 1.0f);
+		shader.SetFloat(uniform_name("pointLights", i, "linear"), 0.09f);
+		shader.SetFloat(uniform_name("pointLights", i, "quadratic"), 0.032f);
+
+		shader.SetInt(uniform_name("pointLights", i, "available"), 1);
 	}
+
+	shader.SetVec3(uniform_name("pointLights", 3, "color"), glm::vec3(1.0));
+	
+	shader.SetVec3(uniform_name("pointLights", 3, "ambient"), glm::vec3(0.05f));
+	shader.SetVec3(uniform_name("pointLights", 3, "diffuse"), glm::vec3(0.7f));
+	shader.SetVec3(uniform_name("pointLights", 3, "specular"), glm::vec3(0.8f));
+
+	shader.SetFloat(uniform_name("pointLights", 3, "constant"), 1.0f);
+	shader.SetFloat(uniform_name("pointLights", 3, "linear"), 0.09f);
+	shader.SetFloat(uniform_name("pointLights", 3, "quadratic"), 0.032f);
+
+	shader.SetInt(uniform_name("pointLights", 3, "available"), 1);
 
 	VAO.Unbind();
 	shader.Disable();
@@ -317,11 +332,9 @@ int main(int argc, char** argv) {
 
 		VAO.Bind();
 		shader.Enable();
-		shader.SetVec3("light.position", lightPos);
-		shader.SetVec3("viewPos", cameraPos);
 
-		shader.SetVec3("flashLight.position", cameraPos);
-		shader.SetVec3("flashLight.direction", cameraFront);
+		shader.SetVec3("viewPos", cameraPos);
+		shader.SetVec3(uniform_name("pointLights", 3, "position"), lightPos);
 
 		for (int i = 0; i < 10; i++) {
 			glm::mat4 model = glm::mat4(1.0f);
@@ -334,7 +347,8 @@ int main(int argc, char** argv) {
 			shader.SetMat4("view", view);
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
-		} 
+		}
+		VAO.Unbind();
 		shader.Disable();
 		
 		lightShader.Enable();
@@ -348,7 +362,16 @@ int main(int argc, char** argv) {
 		lightVAO.Bind();
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		for (int i = 0; i < 3; i++) {
+			lightModel = glm::mat4(1.0f);
+			lightModel = glm::translate(lightModel, lightPositions[i]);
+			lightModel = glm::scale(lightModel, glm::vec3(0.2f));
+			lightShader.SetMat4("model", lightModel);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+
 		lightShader.Disable();
+		lightVAO.Unbind();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

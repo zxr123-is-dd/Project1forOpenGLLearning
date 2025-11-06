@@ -20,6 +20,8 @@ struct DirectLight {
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
+
+	bool available;
 };
 
 struct PointLight {
@@ -33,6 +35,8 @@ struct PointLight {
 	float constant;
 	float linear;
 	float quadratic;
+
+	bool available;
 };
 
 struct SpotLight {
@@ -49,6 +53,8 @@ struct SpotLight {
 	float constant;
 	float linear;
 	float quadratic;
+
+	bool available;
 };
 
 #define NUM_DIRECT_LIGHT 4
@@ -122,17 +128,20 @@ void main() {
 	vec3 norm = normalize(ourNormal);
 	vec3 viewDir = normalize(viewPos - FragPos);
 
-	for (int i = 0; i < NUM_DIRECT_LIGHT; i++) {
-		result += CalcDirectLight(directLights[i], ourNormal, viewDir);
-	}
+	// for (int i = 0; i < NUM_DIRECT_LIGHT; i++) {
+	// 	result += CalcDirectLight(directLights[i], norm, viewDir);
+	// }
 
 	for (int i = 0; i < NUM_POINT_LIGHT; i++) {
-		result += CalcPointLight(pointLights[i], ourNormal, FragPos, viewDir);
+		if (pointLights[i].available) {
+			result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+		}
 	}
 
-	for (int i = 0; i < NUM_SPOT_LIGHT; i++) {
-		result += CalcSpotLight(spotLights[i], ourNormal, FragPos, viewDir);
-	}
+	// for (int i = 0; i < NUM_SPOT_LIGHT; i++) {
+	// 	result += CalcSpotLight(spotLights[i], norm, FragPos, viewDir);
+	// }
 
-	FragColor = vec4(result, 1.0);
+	FragColor = vec4(result , 1.0);
+	// FragColor = vec4(0.3, 0.3, 0.3, 1.0);
 }

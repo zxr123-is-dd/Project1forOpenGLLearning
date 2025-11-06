@@ -32,7 +32,7 @@ Texture::Texture(const std::string& image, const unsigned int type)
 	if (data) {
 		glTexImage2D(GL_TEXTURE_2D, 0, channel, mWidth, mHeight, 0, channel, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
-		std::cout << "Load texture " << image << " successfully" << std::endl;
+		std::cout << "Load texture " << image << " successfully ID: " << mID << std::endl;
 	} else {
 		std::cout << "Failed to load texture" << std::endl;
 	}
