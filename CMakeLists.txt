@@ -30,6 +30,10 @@ set(GLM_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external/glm/")
 set(STB_IMAGE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external/stb_image/include")
 set(STB_IMAGE_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/external/stb_image/src/stb_image.cpp")
 
+# assimp
+set(ASSIMP_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external/assimp/include")
+set(ASSIMP_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/external/assimp/lib/libassimp.dll.a")
+
 # src
 aux_source_directory("${CMAKE_CURRENT_SOURCE_DIR}/src" SRC_DIR)
 
@@ -42,10 +46,12 @@ target_include_directories(demo
     ${GLAD_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
     ${STB_IMAGE_INCLUDE_DIR}
+    ${ASSIMP_INCLUDE_DIR}
 )
 
 target_link_libraries(demo
     PRIVATE
     OpenGL::GL
     ${GLFW_LIBRARY}
+    ${ASSIMP_LIBRARY}
 )

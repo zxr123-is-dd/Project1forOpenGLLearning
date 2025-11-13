@@ -3,8 +3,8 @@
 // shader does not be used in this function
 Shader::Shader(const std::string& vertPath, const std::string& fragPath)
 	: mID(0) {
-	unsigned int vs = LoadShader(vertPath);
-	unsigned int fs = LoadShader(fragPath);
+	unsigned int vs = loadShader(vertPath);
+	unsigned int fs = loadShader(fragPath);
 	if (!vs || !fs) {
 		if (vs) {
 			glDeleteShader(vs);
@@ -38,37 +38,37 @@ Shader::Shader(const std::string& vertPath, const std::string& fragPath)
 
 Shader::~Shader() {}
 
-void Shader::Enable() const {
+void Shader::enable() const {
 	glUseProgram(mID);
 }
 
-void Shader::Disable() const {
+void Shader::disable() const {
 	glUseProgram(0);
 }
 
-void Shader::SetBool(const std::string& name, bool v) const {
+void Shader::setBool(const std::string& name, bool v) const {
 	glUniform1i(glGetUniformLocation(mID, name.c_str()), v);
 }
 
-void Shader::SetInt(const std::string& name, int v) const {
+void Shader::setInt(const std::string& name, int v) const {
 	glUniform1i(glGetUniformLocation(mID, name.c_str()), v);
 }
 
-void Shader::SetFloat(const std::string& name, float v) const {
+void Shader::setFloat(const std::string& name, float v) const {
 	glUniform1f(glGetUniformLocation(mID, name.c_str()), v);
 }
 
-void Shader::SetMat4(const std::string& name, glm::mat4 v) const {
+void Shader::setMat4(const std::string& name, glm::mat4 v) const {
 	glUniformMatrix4fv(glGetUniformLocation(mID, name.c_str()), 1, GL_FALSE, glm::value_ptr(v));
 }
 
-void Shader::SetVec3(const std::string& name, glm::vec3 v) const {
+void Shader::setVec3(const std::string& name, glm::vec3 v) const {
 	glUniform3f(glGetUniformLocation(mID, name.c_str()), v.x, v.y, v.z);
 }
 
 // private
 
-unsigned int Shader::LoadShader(const std::string& path) const {
+unsigned int Shader::loadShader(const std::string& path) const {
 	unsigned int type = 0;
 	if (path.find(".vert") != std::string::npos) {
 		type = GL_VERTEX_SHADER;
@@ -83,7 +83,7 @@ unsigned int Shader::LoadShader(const std::string& path) const {
 		return 0;
 	}
 
-	std::string ssource = ReadFile(path);
+	std::string ssource = readFile(path);
 	const char* source = ssource.c_str();
 	unsigned int shader = glCreateShader(type);
 	if (!shader) {
@@ -111,7 +111,7 @@ unsigned int Shader::LoadShader(const std::string& path) const {
 	return shader;
 }
 
-std::string Shader::ReadFile(const std::string& path) const {
+std::string Shader::readFile(const std::string& path) const {
 	std::ifstream stream(path);
 	if (!stream.is_open()) {
 		std::cout << "Failed to	open file: " << path << std::endl;
