@@ -6,13 +6,10 @@ Mesh::Mesh(std::vector<Vertex>&& vertices, std::vector<unsigned int>&& indices, 
 	: vertices(vertices), indices(indices), textures(textures) {
 
 	setupMesh();
-	print();
+	// print();
 }
 
 Mesh::~Mesh() {
-	// glDeleteVertexArrays(1, &VAO);
-	// glDeleteBuffers(1, &VBO);
-	// glDeleteBuffers(1, &EBO);
 	// std::cout << "Delete Mesh" << std::endl;
 }
 
