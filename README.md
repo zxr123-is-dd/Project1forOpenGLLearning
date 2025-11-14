@@ -1,22 +1,25 @@
-# 简介(introduction)
+# 简介
 
 这个项目是为了学习OpenGL。
 
+注意:
+
+我使用 assimp 库来加载模型。externl 文件夹里的 lib 文件是我在 windows 操作系统
+上编译的，如果在你的电脑上不能正常编译，希望你可以自己编译一遍 assimp 的源码
+
+assimp 项目地址: https://github.com/assimp/assimp
+
+如果你是中文使用者，这里有一篇文章是介绍了如果在 windows 下用 mingw 编译: 
+https://sirlis.cn/posts/windows-mingw64-assimp/
+
+# Introduction
+
 This is a project for OpenGL learning.
-
-欢迎下下来玩。
-
-Welcome for downloading.
-
-Now, I develop this project on sublime, and use ninja to build.
-
-欢迎打星: )
-[https://github.com/zxr123-is-dd/Project1forOpenGLLearning](https://github.com/zxr123-is-dd/Project1forOpenGLLearning)
 
 Notice:
 
-Add the assimp, I compile the sources myself on windows, if there is any problem that you can't compile the sources, please do it yourself.
+I use the assimp to load model. The library in external folder is which one
+I compile it on windows. If it can not run well, please compile the assimp
+sources by yourself.
 
-assim github: https://github.com/assimp/assimp
-
-There is a article show how to compile the sources in Chinese: https://sirlis.cn/posts/windows-mingw64-assimp/
+assimp github: https://github.com/assimp/assimp
