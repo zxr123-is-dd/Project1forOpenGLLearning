@@ -15,7 +15,7 @@ Now, I develop this project on sublime, and use ninja to build.
 
 Notice:
 
-Add the assimp, I compile the sources myself, if there is any problem that you can't compile the sources, please do it yourself.
+Add the assimp, I compile the sources myself on windows, if there is any problem that you can't compile the sources, please do it yourself.
 
 assim github: https://github.com/assimp/assimp
 
