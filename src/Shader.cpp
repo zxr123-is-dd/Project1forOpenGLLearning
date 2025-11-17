@@ -2,7 +2,7 @@
 
 // shader does not be used in this function
 Shader::Shader(const std::string& vertPath, const std::string& fragPath)
-	: mID(0) {
+: mID(0) {
 	unsigned int vs = loadShader(vertPath);
 	unsigned int fs = loadShader(fragPath);
 	if (!vs || !fs) {
@@ -38,12 +38,8 @@ Shader::Shader(const std::string& vertPath, const std::string& fragPath)
 
 Shader::~Shader() {}
 
-void Shader::enable() const {
+void Shader::use() const {
 	glUseProgram(mID);
-}
-
-void Shader::disable() const {
-	glUseProgram(0);
 }
 
 void Shader::setBool(const std::string& name, bool v) const {
@@ -107,6 +103,8 @@ unsigned int Shader::loadShader(const std::string& path) const {
 			return 0;
 		}
 	}
+
+	std::cout << "Shader comile successfully, shader ID is " << shader << std::endl;
 
 	return shader;
 }

@@ -21,7 +21,7 @@
 constexpr unsigned int screenWidth = 1280;
 constexpr unsigned int screenHeight = 960;
 
-glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 5.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
@@ -104,16 +104,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	cameraFront = glm::normalize(front);
 }
 
-// There is no checker so just use this carefully
-std::string uniform_name(const std::string& var, const int& index, const std::string& insideVar) {
-	std::string result = var;
-	result += "[";
-	result += std::to_string(index);
-	result += "].";
-	result += insideVar;
-	return result;
-}
-
 int main(int argc, char** argv) {
 	// Initialize
 	if (!glfwInit()) {
@@ -148,51 +138,62 @@ int main(int argc, char** argv) {
 
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 	std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
-	// Initialization end
+	
+	// Positions
+	glm::vec3 positions[27];
+	int positionCnt = 0;
+	for (auto i : {-1, 0, 1}) {
+		for (auto j : {-1, 0, 1}) {
+			for (auto k : {-1, 0, 1}) {
+				positions[positionCnt++] = glm::vec3(10.0f * i, 10.0f * j, 10.0f * k);
+			}
+		}
+	}
 
-	// glm::vec3 lightPositions[] = {
-	// 	glm::vec3(0.0f, 0.0f, -7.0f),
-	// 	glm::vec3(7.0f, 0.0f,  0.0f),
-	// 	glm::vec3(0.0f, 7.0f,  0.0f)
-	// };
-
+	// shader
 	Shader shader("res/shaders/shader1.vert", "res/shaders/shader1.frag");
-
-	shader.enable();
+	shader.use();
 
 	glm::mat4 projection = glm::mat4(1.0f);
 	projection = glm::perspective(glm::radians(45.0f), (float)screenWidth / screenHeight, 0.1f, 100.0f);
 
 	shader.setMat4("projection", projection);
-	shader.disable();
 
 	Model ourModel("res/models/backpack/backpack.obj");
 	
-	float lastFrame = glfwGetTime();
+	float angle = 0.0f;
 	while (!glfwWindowShouldClose(window)) {
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-		// std::cout << deltaTime << std::endl;
+		// std::cout << 1.0f / deltaTime << std::endl;
+		std::cout << "Pos: (" << cameraPos.x << ", " << cameraPos.y << ", " << cameraPos.z << ")\n";
+		std::cout << "Front: (" << cameraFront.x << ", " << cameraFront.y << ", " << cameraFront.z << ")" << std::endl;
 
 		processInput(window);
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		shader.enable();
+		shader.use();
 
 		glm::mat4 view = glm::mat4(1.0f);
 		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 		shader.setMat4("view", view);
 
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
+		angle += 1.0f;
 		shader.setMat4("model", model);
 
 		ourModel.draw(shader);
 
-		shader.disable();
+		// for (int i = 0; i < positionCnt; i++) {
+		// 	glm::mat4 model = glm::mat4(1.0f);
+		// 	model = glm::translate(model, positions[i]);
+		// 	shader.setMat4("model", model);
+		// 	ourModel.draw(shader);
+		// }
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
