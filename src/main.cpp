@@ -18,8 +18,8 @@
 #include "Shader.h"
 #include "Model.h"
 
-constexpr unsigned int screenWidth = 1280;
-constexpr unsigned int screenHeight = 960;
+constexpr unsigned int screenWidth = 1920;
+constexpr unsigned int screenHeight = 1080;
 
 glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 5.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -90,10 +90,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	if (pitch < -89.9f) {
 		pitch = -89.9f;
 	}
-	if (yaw > 180.0f) {
-		yaw -= 360.0f;
-	}
-	if (yaw < -180.0f) {
+ 	if (yaw < -180.0f) {
 		yaw += 360.0f;
 	}
 	
@@ -138,17 +135,6 @@ int main(int argc, char** argv) {
 
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 	std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
-	
-	// Positions
-	glm::vec3 positions[27];
-	int positionCnt = 0;
-	for (auto i : {-1, 0, 1}) {
-		for (auto j : {-1, 0, 1}) {
-			for (auto k : {-1, 0, 1}) {
-				positions[positionCnt++] = glm::vec3(10.0f * i, 10.0f * j, 10.0f * k);
-			}
-		}
-	}
 
 	// shader
 	Shader shader("res/shaders/shader1.vert", "res/shaders/shader1.frag");
@@ -160,15 +146,17 @@ int main(int argc, char** argv) {
 	shader.setMat4("projection", projection);
 
 	Model ourModel("res/models/backpack/backpack.obj");
-	
+
+	std::cout << "All loaded successfully" << std::endl;
+
 	float angle = 0.0f;
 	while (!glfwWindowShouldClose(window)) {
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		// std::cout << 1.0f / deltaTime << std::endl;
-		std::cout << "Pos: (" << cameraPos.x << ", " << cameraPos.y << ", " << cameraPos.z << ")\n";
-		std::cout << "Front: (" << cameraFront.x << ", " << cameraFront.y << ", " << cameraFront.z << ")" << std::endl;
+		// std::cout << "Pos: (" << cameraPos.x << ", " << cameraPos.y << ", " << cameraPos.z << ")\n";
+		// std::cout << "Front: (" << cameraFront.x << ", " << cameraFront.y << ", " << cameraFront.z << ")" << std::endl;
 
 		processInput(window);
 
@@ -187,13 +175,6 @@ int main(int argc, char** argv) {
 		shader.setMat4("model", model);
 
 		ourModel.draw(shader);
-
-		// for (int i = 0; i < positionCnt; i++) {
-		// 	glm::mat4 model = glm::mat4(1.0f);
-		// 	model = glm::translate(model, positions[i]);
-		// 	shader.setMat4("model", model);
-		// 	ourModel.draw(shader);
-		// }
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

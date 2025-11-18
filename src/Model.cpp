@@ -30,8 +30,6 @@ void Model::loadModel(const std::string &path) {
 	directory = path.substr(0, path.find_last_of('/'));
 
 	processNode(scene->mRootNode, scene);
-	
-	delete scene;
 }
 
 void Model::processNode(aiNode *node, const aiScene *scene) {
