@@ -61,42 +61,6 @@ void processInput(GLFWwindow* window) {
 	}
 }
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
-	if (firstMouse) {
-		lastPosX = xpos;
-		lastPosY = ypos;
-		firstMouse = false;
-	}
-
-	float xoffset = xpos - lastPosX;
-	float yoffset = lastPosY - ypos;
-	lastPosX = xpos;
-	lastPosY = ypos;
-
-	constexpr float sensitivity = 0.05;
-	xoffset *= sensitivity;
-	yoffset *= sensitivity;
-
-	yaw   += xoffset;
-	pitch += yoffset;
-
-	if (pitch > 89.9f) {
-		pitch = 89.9f;
-	}
-	if (pitch < -89.9f) {
-		pitch = -89.9f;
-	}
- 	if (yaw < -180.0f) {
-		yaw += 360.0f;
-	}
-	
-	glm::vec3 front;
-	front.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
-	front.y = sin(glm::radians(pitch));
-	front.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
-	cameraFront = glm::normalize(front);
-}
-
 int main(int argc, char** argv) {
 	// Initialize
 	if (!glfwInit()) {

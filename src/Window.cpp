@@ -2,7 +2,10 @@
 
 Window::Window(const int &screenWidth, const int &screenHeight, const std::string &windowName) :
 screenWidth(screenWidth),
-screenHeight(screenHeight) {
+screenHeight(screenHeight),
+lastFrame(glfwGetTime()),
+deltaTime(0.0f),
+firstMouse(true) {
 	if (!glfwInit()) {
 		std::cout << "Failed to initialize glfw" << std::endl;
 		return -1;
@@ -12,7 +15,7 @@ screenHeight(screenHeight) {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	window = glfwCreateWindow(screenWidth, screenHeight, "project1", NULL, NULL);
+	window = glfwCreateWindow(screenWidth, screenHeight, windowName.c_str(), NULL, NULL);
 	if (window == NULL) {
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
@@ -43,44 +46,67 @@ Window::~Window() {
 
 }
 
+void Window::process() {
+
+}
+
+const glm::vec2& Window::getMouseOffset() const {
+	return mouseOffset;
+}
+
+const float& Window:getDeltaTime() const {
+	return deltaTime;
+}
 
 // private
 void Window::framebufferSizeCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 }
 
-void Window::mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+void Window::mouse_callback(GLFWwindow* window, double xPos, double yPos) {
 	if (firstMouse) {
-		lastPosX = xpos;
-		lastPosY = ypos;
-		firstMouse = false;
+		lastPosX = xPos;
+		lastPosY = yPos;
+		isFirstMouse = false;
 	}
 
-	float xoffset = xpos - lastPosX;
-	float yoffset = lastPosY - ypos;
-	lastPosX = xpos;
-	lastPosY = ypos;
+	mouseOffset.x = (xPos - lastPosX) * sensitivity;
+	mouseOffset.y = (lastPosY - yPos) * sensitivity;
 
-	constexpr float sensitivity = 0.05;
-	xoffset *= sensitivity;
-	yoffset *= sensitivity;
+	lastPosX = xPos;
+	lastPosY = yPos;
+}
 
-	yaw   += xoffset;
-	pitch += yoffset;
+void Window::input() {
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		glfwSetWindowShouldClose(window, true);
+	}
 
-	if (pitch > 89.9f) {
-		pitch = 89.9f;
+	float cameraSpeed = 2.5f * deltaTime;
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+		cameraPos += glm::normalize(glm::cross(cameraUp, glm::cross(cameraFront, cameraUp))) * cameraSpeed;
 	}
-	if (pitch < -89.9f) {
-		pitch = -89.9f;
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+		cameraPos -= glm::normalize(glm::cross(cameraUp, glm::cross(cameraFront, cameraUp))) * cameraSpeed;
 	}
- 	if (yaw < -180.0f) {
-		yaw += 360.0f;
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 	}
-	
-	glm::vec3 front;
-	front.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
-	front.y = sin(glm::radians(pitch));
-	front.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
-	cameraFront = glm::normalize(front);
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	}
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+		cameraPos += cameraUp * cameraSpeed;
+	}
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+		cameraPos -= cameraUp * cameraSpeed;
+	}
+}
+
+void Window::update() {
+
+}
+
+void Window::draw() {
+
 }
