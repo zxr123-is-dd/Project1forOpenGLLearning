@@ -35,10 +35,6 @@ float lastPosX = screenWidth >> 1;
 float lastPosY = screenHeight >> 1;
 bool firstMouse = true;
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-	glViewport(0, 0, width, height);
-}
-
 void processInput(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
