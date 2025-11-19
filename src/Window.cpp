@@ -1,11 +1,9 @@
 #include "Window.h"
 
-Window::Window(const int &screenWidth, const int &screenHeight, const std::string &windowName) :
-screenWidth(screenWidth),
-screenHeight(screenHeight),
-lastFrame(glfwGetTime()),
-deltaTime(0.0f),
-firstMouse(true) {
+Window::Window(const int& screenWidth, const int& screenHeight, const std::string& windowName) :
+	screenWidth(screenWidth), screenHeight(screenHeight),
+	lastFrame(glfwGetTime()), deltaTime(0.0f), firstMouse(true) {
+
 	if (!glfwInit()) {
 		std::cout << "Failed to initialize glfw" << std::endl;
 		return -1;
@@ -82,25 +80,26 @@ void Window::input() {
 		glfwSetWindowShouldClose(window, true);
 	}
 
-	float cameraSpeed = 2.5f * deltaTime;
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		cameraPos += glm::normalize(glm::cross(cameraUp, glm::cross(cameraFront, cameraUp))) * cameraSpeed;
-	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-		cameraPos -= glm::normalize(glm::cross(cameraUp, glm::cross(cameraFront, cameraUp))) * cameraSpeed;
-	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-	}
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-		cameraPos += cameraUp * cameraSpeed;
-	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-		cameraPos -= cameraUp * cameraSpeed;
-	}
+	// glm::vec3 posOffset = glm::vec3(0.0f);
+
+	// if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+	// 	posOffset.x += 0xFF;
+	// }
+	// if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+	// 	cameraPos -= glm::normalize(glm::cross(cameraUp, glm::cross(cameraFront, cameraUp))) * cameraSpeed;
+	// }
+	// if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+	// 	cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	// }
+	// if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+	// 	cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	// }
+	// if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+	// 	cameraPos += cameraUp * cameraSpeed;
+	// }
+	// if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+	// 	cameraPos -= cameraUp * cameraSpeed;
+	// }
 }
 
 void Window::update() {

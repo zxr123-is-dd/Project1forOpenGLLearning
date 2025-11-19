@@ -2,13 +2,13 @@
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
-#include <glm/glm.h>
+#include <glm/glm.hpp>
 
 #include "Camera.h"
 
 class Window {
 public:
-	Window(const int &screenWidth, const int &screenHeight, const std::string &windowName);
+	Window(const int& screenWidth, const int& screenHeight, const std::string& windowName);
 	~Window();
 
 	void process();
@@ -17,7 +17,7 @@ public:
 
 private:
 	void framebufferSizeCallback(GLFWwindow* window, int width, int height);
-	void mouseCallback(GLFWwindow* window, double xpos, double ypos);
+	void mouseCallback(GLFWwindow* window, double xPos, double yPos);
 
 	void input();
 	void update();
@@ -39,4 +39,6 @@ private:
 
 	float MouseSensitivity;
 	bool isFirstMouse;
+
+	glm::vec3 posOffset;
 };
