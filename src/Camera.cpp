@@ -1,12 +1,9 @@
 #include "Camera.h"
 
-Camera::Camera(
-	const glm::vec3& pos,
-	const float& yaw, const float& pitch,
-	const float& width, const float& height,
-	const float& fov = 45.0f, const float& farPlane = 100.0f) :
-	pos(pos), front(front), up(up), projection(glm::mat4(1.0f)) {
+Camera::Camera(glm::vec3 pos, float yaw, float pitch, float width, float height, float fov, float farPlane) :
+	pos(pos), yaw(yaw), pitch(pitch), width(width), height(height), projection(glm::mat4(1.0f)) {
 
+	up = glm::vec3(0.0f, 1.0f, 0.0f);
 	calcDirect();
 	calcView();
 	setProjection(fov, farPlane);
@@ -16,35 +13,75 @@ Camera::~Camera() {
 
 }
 
-void Camera::moveDirect(const float& _yaw, const float& _pitch) {
+void Camera::moveDirect(float _yaw, float _pitch) {
 	yaw += _yaw;
+	while (yaw > 360.0f) {
+		yaw -= 360.0f;
+	}
+	while (yaw < -360.0f) {
+		yaw += 360.0f;
+	}
+
 	pitch += _pitch;
+	if (pitch > 89.5f) {
+		pitch = 89.5f;
+	}
+	if (pitch < -89.5f) {
+		pitch = -89.5f;
+	}
+	
 	calcDirect();
 }
 
-void Camera::setDirect(const float& _yaw, const float& _pitch) {
+void Camera::setDirect(float _yaw, float _pitch) {
 	yaw = _yaw;
+	while (yaw > 360.0f) {
+		yaw -= 360.0f;
+	}
+	while (yaw < -360.0f) {
+		yaw += 360.0f;
+	}
+
 	pitch = _pitch;
+	if (pitch > 89.5f) {
+		pitch = 89.5f;
+	}
+	if (pitch < -89.5f) {
+		pitch = -89.5f;
+	}
+
 	calcDirect();
 }
 
-void Camera::movePos(const glm::vec3& _pos) {
+void Camera::movePos(glm::vec3 _pos) {
 	pos += _pos;
 }
 
-void Camera::setPos(const glm::vec3& _pos) {
+void Camera::setPos(glm::vec3 _pos) {
 	pos = _pos;
 }
 
-void Camera::setProjection(const float& fov, const float& farPlane) {
+void Camera::setProjection(float fov, float farPlane) {
 	projection = glm::perspective(glm::radians(fov), width / height, 0.1f, farPlane);
+}
+
+glm::vec3 Camera::getPos() const {
+	return pos;
+}
+
+glm::vec3 Camera::getFront() const {
+	return front;
+}
+
+glm::vec3 Camera::getUp() const {
+	return up;
 }
 
 const glm::mat4& Camera::getProjection() const {
 	return projection;
 }
 
-const glm::mat4& Camera::getView() const {
+const glm::mat4& Camera::getView() {
 	calcView();
 	return view;
 }
@@ -59,5 +96,5 @@ void Camera::calcDirect() {
 }
 
 void Camera::calcView() {
-	view = glm::LootAt(pos, pos + front, up);
+	view = glm::lookAt(pos, pos + front, up);
 }
