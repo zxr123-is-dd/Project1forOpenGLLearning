@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <memory>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -12,11 +13,12 @@
 #include "Shader.h"
 #include "Model.h"
 #include "Camera.h"
+#include "Object.h"
 
 constexpr unsigned int screenWidth = 1920;
 constexpr unsigned int screenHeight = 1080;
 
-glm::vec2 mouseOffset = {0.0f, 0.0f};
+glm::vec2 mouseOffset = glm::vec2(0.0f);
 float mouseSensitivity = 1.25f;
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
@@ -59,10 +61,12 @@ int main(int argc, char** argv) {
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 	std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 
-
+	// 
 	Camera camera(glm::vec3(0.0f, 0.0f, 5.0f), -90.0f, 0.0f, screenWidth, screenHeight, 45.0f, 100.0f);
-	Shader shader("res/shaders/shader1.vert", "res/shaders/shader1.frag");
-	Model ourModel("res/models/backpack/backpack.obj");
+	Shader shader("../res/shaders/shader1.vert", "../res/shaders/shader1.frag");
+	std::shared_ptr<Model> ourModel = std::make_shared<Model>("../res/models/backpack/backpack.obj");
+
+	Object ourObject(ourModel, glm::vec3(0.0f));
 
 	while (!glfwWindowShouldClose(window)) {
 		// Input
@@ -75,19 +79,7 @@ int main(int argc, char** argv) {
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		shader.use();
-		shader.setMat4("projection", camera.getProjection());
-		shader.setMat4("view", camera.getView());
-
-		glm::mat4 place = glm::mat4(1.0f);
-		place = glm::translate(place, glm::vec3(0.0f, 0.0f, 0.0f));
-		shader.setMat4("place", place);
-
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(1.5f, 1.0f, 1.0f));
-		shader.setMat4("model", model);
-
-		ourModel.draw(shader);
+		ourObject.draw(shader, camera);
 
 	    glfwSwapBuffers(window);
 	    glfwPollEvents();
@@ -129,22 +121,22 @@ void processInput(GLFWwindow* window, Camera& camera) {
 	constexpr float cameraSpeed = 0.04f;
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		posOffset += glm::normalize(glm::cross(camera.getUp(), glm::cross(camera.getFront(), camera.getUp()))) * cameraSpeed;
+		posOffset += glm::normalize(glm::cross(camera.up(), glm::cross(camera.front(), camera.up()))) * cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-		posOffset -= glm::normalize(glm::cross(camera.getUp(), glm::cross(camera.getFront(), camera.getUp()))) * cameraSpeed;
+		posOffset -= glm::normalize(glm::cross(camera.up(), glm::cross(camera.front(), camera.up()))) * cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		posOffset -= glm::normalize(glm::cross(camera.getFront(), camera.getUp())) * cameraSpeed;
+		posOffset -= glm::normalize(glm::cross(camera.front(), camera.up())) * cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		posOffset += glm::normalize(glm::cross(camera.getFront(), camera.getUp())) * cameraSpeed;
+		posOffset += glm::normalize(glm::cross(camera.front(), camera.up())) * cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-		posOffset += camera.getUp() * cameraSpeed;
+		posOffset += camera.up() * cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-		posOffset -= camera.getUp() * cameraSpeed;
+		posOffset -= camera.up() * cameraSpeed;
 	}
 
 	camera.movePos(posOffset);

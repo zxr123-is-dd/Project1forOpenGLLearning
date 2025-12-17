@@ -17,13 +17,14 @@
 #include <stb_image.h>
 
 #include "Mesh.h"
+#include "Camera.h"
 
 class Model {
 public:
-	Model(const std::string &path);
+	Model(const std::string& path);
 	~Model();
 
-	void draw(const Shader &shader);
+	void draw(const Shader& shader);
 
 private:
 	std::vector<Mesh> meshes;

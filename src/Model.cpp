@@ -11,9 +11,9 @@ Model::~Model() {
 	std::cout << "Model destoryed" << std::endl;
 }
 
-void Model::draw(const Shader &shader) {
-	for (unsigned int i = 0; i < meshes.size(); i++) {
-		meshes[i].draw(shader);
+void Model::draw(const Shader& shader) {
+	for (const auto& mesh : meshes) {
+		mesh.draw(shader);
 	}
 }
 
@@ -112,7 +112,7 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType 
 
 		if (!skip) {
 			Texture texture;
-			texture.id = textureFromFile(str.C_Str(), directory);
+			texture.id = textureFromFile(str.C_Str(), directory, false);
 			texture.type = typeName;
 			texture.path = str.C_Str();
 

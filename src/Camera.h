@@ -21,29 +21,28 @@ public:
 	void setDirect(float _yaw, float _pitch);
 	void movePos(glm::vec3 _pos);
 	void setPos(glm::vec3 _pos);
-	void setProjection(float fov, float farPlane);
+	void setProj(float fov, float farPlane);
 
-	glm::vec3 getPos() const;
-	glm::vec3 getFront() const;
-	glm::vec3 getUp() const;
-
-	const glm::mat4& getProjection() const;
-	const glm::mat4& getView();
+	glm::vec3 pos() const;
+	glm::vec3 front() const;
+	glm::vec3 up() const;
+	const glm::mat4& proj() const;
+	const glm::mat4& view() const;
 
 private:
 	void calcDirect();
 	void calcView();
 
-	glm::vec3 pos;
-	glm::vec3 front;
-	glm::vec3 up;
+	glm::vec3 pos_;
+	glm::vec3 front_;
+	glm::vec3 up_;
 
-	glm::mat4 projection;
-	glm::mat4 view;
+	glm::mat4 proj_;
+	glm::mat4 view_;
 
-	float yaw;
-	float pitch;
+	float yaw_;
+	float pitch_;
 
-	float width;
-	float height;
+	float width_;
+	float height_;
 };
