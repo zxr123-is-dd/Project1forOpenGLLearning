@@ -12,7 +12,7 @@ Mesh::~Mesh() {
 	// std::cout << "Delete Mesh" << std::endl;
 }
 
-void Mesh::draw(const Shader &shader) {
+void Mesh::draw(const Shader &shader) const {
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
 	for (unsigned int i = 0; i < textures.size(); i++) {
@@ -35,6 +35,13 @@ void Mesh::draw(const Shader &shader) {
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+}
+
+void Mesh::print() const {
+	std::cout << "Length of vertices: " << vertices.size() << "\n";
+	std::cout << "Length of indices: " << indices.size() << "\n";
+	std::cout << "Lenght of textures: " << textures.size() << "\n";
+	std::cout << "VAO: " << VAO << " VBO: " << VBO << " EBO: " << EBO << std::endl;
 }
 
 // private
@@ -62,11 +69,4 @@ void Mesh::setupMesh() {
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
 	glBindVertexArray(0);
-}
-
-void Mesh::print() {
-	std::cout << "Length of vertices: " << vertices.size() << "\n";
-	std::cout << "Length of indices: " << indices.size() << "\n";
-	std::cout << "Lenght of textures: " << textures.size() << "\n";
-	std::cout << "VAO: " << VAO << " VBO: " << VBO << " EBO: " << EBO << std::endl;
 }
