@@ -11,8 +11,8 @@ Object::~Object() {
 void Object::draw(const Shader& shader, const Camera& camera) const {
     shader.use();
 
-    shader.setMat4("projection", camera.proj());
-    shader.setMat4("view", camera.view());
+    shader.setMat4("proj", camera.getProjection());
+    shader.setMat4("view", camera.getView());
 
     glm::mat4 place = glm::mat4(1.0f);
     place = glm::translate(place, pos_);

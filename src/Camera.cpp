@@ -1,19 +1,19 @@
 #include "Camera.h"
 
-Camera::Camera(glm::vec3 pos, float yaw, float pitch, float width, float height, float fov, float farPlane)
-	: pos_(pos), yaw_(yaw), pitch_(pitch), width_(width), height_(height), proj_(glm::mat4(1.0f)) {
+Camera::Camera(glm::vec3 position, float yaw, float pitch, float width, float height, float fov, float farPlane)
+	: position_(position), yaw_(yaw), pitch_(pitch), width_(width), height_(height), projection_(glm::mat4(1.0f)) {
 
 	up_ = glm::vec3(0.0f, 1.0f, 0.0f);
-	calcDirect();
+	calcDirection();
 	calcView();
-	setProj(fov, farPlane);
+	setProjection(fov, farPlane);
 }
 
 Camera::~Camera() {
 
 }
 
-void Camera::moveDirect(float yaw, float pitch) {
+void Camera::moveDirection(float yaw, float pitch) {
 	yaw_ += yaw;
 	while (yaw_ > 360.0f) {
 		yaw_ -= 360.0f;
@@ -30,11 +30,11 @@ void Camera::moveDirect(float yaw, float pitch) {
 		pitch_ = -89.5f;
 	}
 	
-	calcDirect();
+	calcDirection();
 	calcView();
 }
 
-void Camera::setDirect(float yaw, float pitch) {
+void Camera::setDirection(float yaw, float pitch) {
 	yaw_ = yaw;
 	while (yaw_ > 360.0f) {
 		yaw_ -= 360.0f;
@@ -51,47 +51,47 @@ void Camera::setDirect(float yaw, float pitch) {
 		pitch_ = -89.5f;
 	}
 
-	calcDirect();
+	calcDirection();
 	calcView();
 }
 
-void Camera::movePos(glm::vec3 pos) {
-	pos_ += pos;
+void Camera::movePosition(glm::vec3 pos) {
+	position_ += pos;
 	calcView();
 }
 
-void Camera::setPos(glm::vec3 pos) {
-	pos_ = pos;
+void Camera::setPosition(glm::vec3 pos) {
+	position_ = pos;
 	calcView();
 }
 
-void Camera::setProj(float fov, float farPlane) {
-	proj_ = glm::perspective(glm::radians(fov), width_ / height_, 0.1f, farPlane);
+void Camera::setProjection(float fov, float farPlane) {
+	projection_ = glm::perspective(glm::radians(fov), width_ / height_, 0.1f, farPlane);
 }
 
-glm::vec3 Camera::pos() const {
-	return pos_;
+glm::vec3 Camera::getPosition() const {
+	return position_;
 }
 
-glm::vec3 Camera::front() const {
+glm::vec3 Camera::getFront() const {
 	return front_;
 }
 
-glm::vec3 Camera::up() const {
+glm::vec3 Camera::getUp() const {
 	return up_;
 }
 
-const glm::mat4& Camera::proj() const {
-	return proj_;
+const glm::mat4& Camera::getProjection() const {
+	return projection_;
 }
 
-const glm::mat4& Camera::view() const {
+const glm::mat4& Camera::getView() const {
 	return view_;
 }
 
 // private
 
-void Camera::calcDirect() {
+void Camera::calcDirection() {
 	front_.x = cos(glm::radians(pitch_)) * cos(glm::radians(yaw_));
 	front_.y = sin(glm::radians(pitch_));
 	front_.z = cos(glm::radians(pitch_)) * sin(glm::radians(yaw_));
@@ -99,5 +99,5 @@ void Camera::calcDirect() {
 }
 
 void Camera::calcView() {
-	view_ = glm::lookAt(pos_, pos_ + front_, up_);
+	view_ = glm::lookAt(position_, position_ + front_, up_);
 }

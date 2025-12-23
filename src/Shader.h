@@ -1,7 +1,3 @@
-/*
- * author	: zxr123
- * date		: 2025/7/14
- */
 #pragma once
 
 #include <string>

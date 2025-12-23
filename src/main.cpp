@@ -14,6 +14,7 @@
 #include "Model.h"
 #include "Camera.h"
 #include "Object.h"
+#include "Light.h"
 
 constexpr unsigned int screenWidth = 1920;
 constexpr unsigned int screenHeight = 1080;
@@ -63,16 +64,18 @@ int main(int argc, char** argv) {
 
 	// 
 	Camera camera(glm::vec3(0.0f, 0.0f, 5.0f), -90.0f, 0.0f, screenWidth, screenHeight, 45.0f, 100.0f);
-	Shader shader("../res/shaders/shader1.vert", "../res/shaders/shader1.frag");
+	Shader shader("../res/shaders/shader.vert", "../res/shaders/shader.frag");
 	std::shared_ptr<Model> ourModel = std::make_shared<Model>("../res/models/backpack/backpack.obj");
 
-	Object ourObject(ourModel, glm::vec3(0.0f));
+	PointLight pointLight();
 
+	Object ourObject(ourModel, glm::vec3(0.0f));
+	
 	while (!glfwWindowShouldClose(window)) {
 		// Input
 		processInput(window, camera);
 
-		camera.moveDirect(mouseOffset.x / 10.0f, mouseOffset.y / 10.0f);
+		camera.moveDirection(mouseOffset.x / 10.0f, mouseOffset.y / 10.0f);
 		mouseOffset = glm::vec2(0.0f, 0.0f);
 
 		// Draw
@@ -121,23 +124,23 @@ void processInput(GLFWwindow* window, Camera& camera) {
 	constexpr float cameraSpeed = 0.04f;
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		posOffset += glm::normalize(glm::cross(camera.up(), glm::cross(camera.front(), camera.up()))) * cameraSpeed;
+		posOffset += glm::normalize(glm::cross(camera.getUp(), glm::cross(camera.getFront(), camera.getUp()))) * cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-		posOffset -= glm::normalize(glm::cross(camera.up(), glm::cross(camera.front(), camera.up()))) * cameraSpeed;
+		posOffset -= glm::normalize(glm::cross(camera.getUp(), glm::cross(camera.getFront(), camera.getUp()))) * cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		posOffset -= glm::normalize(glm::cross(camera.front(), camera.up())) * cameraSpeed;
+		posOffset -= glm::normalize(glm::cross(camera.getFront(), camera.getUp())) * cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		posOffset += glm::normalize(glm::cross(camera.front(), camera.up())) * cameraSpeed;
+		posOffset += glm::normalize(glm::cross(camera.getFront(), camera.getUp())) * cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-		posOffset += camera.up() * cameraSpeed;
+		posOffset += camera.getUp() * cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-		posOffset -= camera.up() * cameraSpeed;
+		posOffset -= camera.getUp() * cameraSpeed;
 	}
 
-	camera.movePos(posOffset);
+	camera.movePosition(posOffset);
 }

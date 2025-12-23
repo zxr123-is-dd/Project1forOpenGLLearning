@@ -17,27 +17,27 @@ public:
 	Camera(glm::vec3 pos, float yaw, float pitch, float width, float height, float fov, float farPlane);
 	~Camera();
 
-	void moveDirect(float _yaw, float _pitch);
-	void setDirect(float _yaw, float _pitch);
-	void movePos(glm::vec3 _pos);
-	void setPos(glm::vec3 _pos);
-	void setProj(float fov, float farPlane);
+	void moveDirection(float _yaw, float _pitch);
+	void setDirection(float _yaw, float _pitch);
+	void movePosition(glm::vec3 _pos);
+	void setPosition(glm::vec3 _pos);
+	void setProjection(float fov, float farPlane);
 
-	glm::vec3 pos() const;
-	glm::vec3 front() const;
-	glm::vec3 up() const;
-	const glm::mat4& proj() const;
-	const glm::mat4& view() const;
+	glm::vec3 getPosition() const;
+	glm::vec3 getFront() const;
+	glm::vec3 getUp() const;
+	const glm::mat4& getProjection() const;
+	const glm::mat4& getView() const;
 
 private:
-	void calcDirect();
+	void calcDirection();
 	void calcView();
 
-	glm::vec3 pos_;
+	glm::vec3 position_;
 	glm::vec3 front_;
 	glm::vec3 up_;
 
-	glm::mat4 proj_;
+	glm::mat4 projection_;
 	glm::mat4 view_;
 
 	float yaw_;
