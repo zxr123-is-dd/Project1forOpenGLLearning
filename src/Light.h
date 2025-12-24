@@ -26,7 +26,7 @@ class BaseLight {
 public:
     BaseLight(const std::string& name, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, LightType type);
     ~BaseLight() = default;
-    virtual void setShader(const Shader& shader, int index) const = 0;
+    virtual void setShader(const Shader& shader, unsigned int index) const = 0;
     void setStatus(LightStatus status);
     LightStatus getStatus() const;
     void setBrightness(float brightness);
@@ -49,7 +49,7 @@ class DirectLight : public BaseLight {
 public:
     DirectLight(const std::string& name, glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
     ~DirectLight();
-    void setShader(const Shader& shader, int index) const;
+    void setShader(const Shader& shader, unsigned int index) const;
 
 private:
     glm::vec3 direction_;
@@ -59,7 +59,7 @@ class PointLight : public BaseLight {
 public:
     PointLight(const std::string& name, glm::vec3 position, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic);
     ~PointLight();
-    void setShader(const Shader& shader, int index) const;
+    void setShader(const Shader& shader, unsigned int index) const;
 
 private:
     glm::vec3 position_;
@@ -72,7 +72,7 @@ class SpotLight : public BaseLight {
 public:
     SpotLight(const std::string& name, glm::vec3 position, glm::vec3 direction, float cutoff, float outerCutoff, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic);
     ~SpotLight();
-    void setShader(const Shader& shader, int index) const;
+    void setShader(const Shader& shader, unsigned int index) const;
 
 private:
     glm::vec3 position_;
@@ -100,15 +100,36 @@ public:
     ~Lights();
 
     template<ValidLightType T>
-    void push(const T& light);
+    void push(const std::shared_ptr<T>& light);
 
     void setShader(const Shader& shader) const;
 
 private:
     template<ValidLightType T>
-    void setLightOff(const Shader& shader, int index) const;
+    void setLightOff(const Shader& shader, unsigned int index) const;
 
     std::vector<std::shared_ptr<DirectLight>> directLights_;
     std::vector<std::shared_ptr<PointLight>> pointLights_;
     std::vector<std::shared_ptr<SpotLight>> spotLights_;
 };
+
+// Lights::push
+template<>
+void Lights::push<DirectLight>(const std::shared_ptr<DirectLight>& light);
+
+template<>
+void Lights::push<PointLight>(const std::shared_ptr<PointLight>& light);
+
+template<>
+void Lights::push<SpotLight>(const std::shared_ptr<SpotLight>& light);
+
+
+// Lights::setLightOff specific declaration
+template<>
+void Lights::setLightOff<DirectLight>(const Shader& shader, unsigned int index) const;
+
+template<>
+void Lights::setLightOff<PointLight>(const Shader& shader, unsigned int index) const;
+
+template<>
+void Lights::setLightOff<SpotLight>(const Shader& shader, unsigned int index) const;

@@ -11,16 +11,16 @@ Object::~Object() {
 void Object::draw(const Shader& shader, const Camera& camera) const {
     shader.use();
 
-    shader.setMat4("proj", camera.getProjection());
-    shader.setMat4("view", camera.getView());
+    shader.setUniform<glm::mat4>("projection", camera.getProjection());
+    shader.setUniform<glm::mat4>("view", camera.getView());
 
     glm::mat4 place = glm::mat4(1.0f);
     place = glm::translate(place, pos_);
-    shader.setMat4("place", place);
+    shader.setUniform<glm::mat4>("place", place);
 
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::scale(model, glm::vec3(1.0f));
-    shader.setMat4("model", model);
+    shader.setUniform<glm::mat4>("model", model);
 
     model_->draw(shader);
 }

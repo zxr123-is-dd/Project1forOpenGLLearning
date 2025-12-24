@@ -2,8 +2,7 @@
 
 out vec4 FragColor;
 
-in vec3 ourLightColor;
-in vec2 ourTexCoord;
+in vec2 ourTexCoords;
 in vec3 ourNormal;
 in vec3 FragPos;
 
@@ -74,9 +73,9 @@ vec3 CalcDirectLight(DirectLight light, vec3 normal, vec3 viewDir) {
 	vec3 reflectDir = reflect(-lightDir, normal);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 
-	vec3 ambient = light.ambient * vec3(texture(material.diffuse, ourTexCoord));
-	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, ourTexCoord));
-	vec3 specular = light.specular * spec * vec3(texture(material.specular, ourTexCoord));
+	vec3 ambient = light.ambient * vec3(texture(material.diffuse, ourTexCoords));
+	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, ourTexCoords));
+	vec3 specular = light.specular * spec * vec3(texture(material.specular, ourTexCoords));
 
 	return (ambient + diffuse + specular);
 }
@@ -92,9 +91,9 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
 	float distance = length(light.position - fragPos);
 	float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * distance * distance);
 
-	vec3 ambient = light.ambient * vec3(texture(material.diffuse, ourTexCoord));
-	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, ourTexCoord));
-	vec3 specular = light.specular * spec * vec3(texture(material.specular, ourTexCoord));
+	vec3 ambient = light.ambient * vec3(texture(material.diffuse, ourTexCoords));
+	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, ourTexCoords));
+	vec3 specular = light.specular * spec * vec3(texture(material.specular, ourTexCoords));
 
 	return (ambient + diffuse + specular) * attenuation;
 }
@@ -114,9 +113,9 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
 	float distance = length(light.position - fragPos);
 	float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * distance * distance);
 
-	vec3 ambient = light.ambient * vec3(texture(material.diffuse, ourTexCoord));
-	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, ourTexCoord));
-	vec3 specular = light.specular * spec * vec3(texture(material.specular, ourTexCoord));
+	vec3 ambient = light.ambient * vec3(texture(material.diffuse, ourTexCoords));
+	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, ourTexCoords));
+	vec3 specular = light.specular * spec * vec3(texture(material.specular, ourTexCoords));
 
 	return (ambient + diffuse + specular) * intensity * attenuation;
 }

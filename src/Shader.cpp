@@ -42,27 +42,34 @@ void Shader::use() const {
 	glUseProgram(mID);
 }
 
-void Shader::setBool(const std::string& name, bool v) const {
+template<ValidUniformType T>
+void Shader::setUniform(const std::string& name, T val) const {
+}
+
+template<>
+void Shader::setUniform<bool>(const std::string& name, bool v) const {
 	glUniform1i(glGetUniformLocation(mID, name.c_str()), v);
 }
 
-void Shader::setInt(const std::string& name, int v) const {
+template<>
+void Shader::setUniform<int>(const std::string& name, int v) const {
 	glUniform1i(glGetUniformLocation(mID, name.c_str()), v);
 }
 
-void Shader::setFloat(const std::string& name, float v) const {
+template<>
+void Shader::setUniform<float>(const std::string& name, float v) const {
 	glUniform1f(glGetUniformLocation(mID, name.c_str()), v);
 }
 
-void Shader::setMat4(const std::string& name, glm::mat4 v) const {
+template<>
+void Shader::setUniform<glm::mat4>(const std::string& name, glm::mat4 v) const {
 	glUniformMatrix4fv(glGetUniformLocation(mID, name.c_str()), 1, GL_FALSE, glm::value_ptr(v));
 }
 
-void Shader::setVec3(const std::string& name, glm::vec3 v) const {
+template<>
+void Shader::setUniform<glm::vec3>(const std::string& name, glm::vec3 v) const {
 	glUniform3f(glGetUniformLocation(mID, name.c_str()), v.x, v.y, v.z);
 }
-
-// private
 
 unsigned int Shader::loadShader(const std::string& path) const {
 	unsigned int type = 0;
@@ -104,7 +111,7 @@ unsigned int Shader::loadShader(const std::string& path) const {
 		}
 	}
 
-	std::cout << "Shader comile successfully, shader ID is " << shader << std::endl;
+	std::cout << "Shader compile successfully, shader ID is " << shader << std::endl;
 
 	return shader;
 }

@@ -9,10 +9,10 @@ out vec3 ourNormal;
 uniform mat4 model;
 uniform mat4 place;
 uniform mat4 view;
-uniform mat4 proj;
+uniform mat4 projection;
 
 void main() {
-	gl_Position = proj * view * place * model * vec4(aPos, 1.0);
+	gl_Position = projection * view * place * model * vec4(aPos, 1.0);
 	ourTexCoords = aTexCoords;
 	ourNormal = vec3(model * vec4(aNormal, 1.0f));
 }

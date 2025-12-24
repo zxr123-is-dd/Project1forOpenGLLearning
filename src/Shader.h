@@ -4,11 +4,21 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <concepts>
+#include <type_traits>
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+template<typename T>
+concept ValidUniformType = 
+	std::is_same_v<T, bool> ||
+	std::is_same_v<T, int> ||
+	std::is_same_v<T, float> ||
+	std::is_same_v<T, glm::mat4> ||
+	std::is_same_v<T, glm::vec3>;
 
 class Shader {
 public:
@@ -16,11 +26,9 @@ public:
 	~Shader();
 
 	void use() const;
-	void setBool(const std::string& name, bool v) const;
-	void setInt(const std::string& name, int v) const;
-	void setFloat(const std::string& name, float v) const;
-	void setMat4(const std::string& name, glm::mat4 v) const;
-	void setVec3(const std::string& name, glm::vec3 v) const;
+
+	template<ValidUniformType T>
+	void setUniform(const std::string& name, T val) const;
 
 private:
 	unsigned int mID;

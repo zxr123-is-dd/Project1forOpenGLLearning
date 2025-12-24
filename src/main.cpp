@@ -67,10 +67,15 @@ int main(int argc, char** argv) {
 	Shader shader("../res/shaders/shader.vert", "../res/shaders/shader.frag");
 	std::shared_ptr<Model> ourModel = std::make_shared<Model>("../res/models/backpack/backpack.obj");
 
-	PointLight pointLight();
-
 	Object ourObject(ourModel, glm::vec3(0.0f));
-	
+
+	auto pointLight1 = std::make_shared<PointLight>("point light 1", glm::vec3(3.0f), glm::vec3(0.1f), glm::vec3(1.5f), glm::vec3(0.7f), 1.0f, 0.09f, 0.032f);
+
+	Lights lights1;
+	lights1.push<PointLight>(pointLight1);
+
+	pointLight1->setBrightness(3.0f);
+
 	while (!glfwWindowShouldClose(window)) {
 		// Input
 		processInput(window, camera);
@@ -82,6 +87,7 @@ int main(int argc, char** argv) {
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		lights1.setShader(shader);
 		ourObject.draw(shader, camera);
 
 	    glfwSwapBuffers(window);
