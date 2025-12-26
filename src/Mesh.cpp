@@ -32,6 +32,7 @@ void Mesh::draw(const Shader &shader) const {
 		glBindTexture(GL_TEXTURE_2D, textures[i].id);
 	}
 	glActiveTexture(GL_TEXTURE0);
+	shader.setUniform<float>("material.shininess", 32.0f);
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);

@@ -4,11 +4,9 @@
 
 Model::Model(const std::string &path) {
 	loadModel(path);
-    std::cout << "Model loaded" << std::endl;
 }
 
 Model::~Model() {
-	std::cout << "Model destoryed" << std::endl;
 }
 
 void Model::draw(const Shader& shader) {

@@ -53,17 +53,18 @@ struct SpotLight {
 	bool available;
 };
 
-// #define NUM_MATERIAL 16
 #define NUM_DIRECT_LIGHT 4
 #define NUM_POINT_LIGHT 16
 #define NUM_SPOT_LIGHT 16
 
+// uniform
 uniform Material material;
 uniform DirectLight directLights[NUM_DIRECT_LIGHT];
 uniform PointLight pointLights[NUM_POINT_LIGHT];
 uniform SpotLight spotLights[NUM_SPOT_LIGHT];
 
 uniform vec3 viewPos;
+// *******
 
 vec3 CalcDirectLight(DirectLight light, vec3 normal, vec3 viewDir) {
 	vec3 lightDir = normalize(-light.direction);

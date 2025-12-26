@@ -65,16 +65,22 @@ int main(int argc, char** argv) {
 	// 
 	Camera camera(glm::vec3(0.0f, 0.0f, 5.0f), -90.0f, 0.0f, screenWidth, screenHeight, 45.0f, 100.0f);
 	Shader shader("../res/shaders/shader.vert", "../res/shaders/shader.frag");
-	std::shared_ptr<Model> ourModel = std::make_shared<Model>("../res/models/backpack/backpack.obj");
+	auto ourModel = std::make_shared<Model>("../res/models/backpack/backpack.obj");
 
-	Object ourObject(ourModel, glm::vec3(0.0f));
+	Shader shader1("../res/shaders/shader1.vert", "../res/shaders/shader1.frag");
+	auto ourModel1 = std::make_shared<Model>("../res/models/test1/A house and a torus.obj");
 
-	auto pointLight1 = std::make_shared<PointLight>("point light 1", glm::vec3(3.0f), glm::vec3(0.1f), glm::vec3(1.5f), glm::vec3(0.7f), 1.0f, 0.09f, 0.032f);
+	Object ourObject(ourModel, glm::vec3(5.0f, 0.0f, -3.0f));
+	Object ourObject1(ourModel1, glm::vec3(0.0f, -3.0f, 0.0f));
+
+	auto pointLight1 = std::make_shared<PointLight>("point light 1", glm::vec3(3.0f), glm::vec3(0.1f), glm::vec3(1.0f), glm::vec3(0.7f), 1.0f, 0.09f, 0.032f);
+	auto directLight1 = std::make_shared<DirectLight>("direct light 1", glm::vec3(-1.0f, -2.0f, -3.0f), glm::vec3(0.1f), glm::vec3(1.0f), glm::vec3(0.7f));
 
 	Lights lights1;
 	lights1.push<PointLight>(pointLight1);
+	lights1.push<DirectLight>(directLight1);
 
-	pointLight1->setBrightness(3.0f);
+	pointLight1->setBrightness(1.0f);
 
 	while (!glfwWindowShouldClose(window)) {
 		// Input
@@ -89,6 +95,9 @@ int main(int argc, char** argv) {
 
 		lights1.setShader(shader);
 		ourObject.draw(shader, camera);
+
+		lights1.setShader(shader1);
+		ourObject1.draw(shader1, camera);
 
 	    glfwSwapBuffers(window);
 	    glfwPollEvents();
