@@ -7,6 +7,7 @@
 #include <concepts>
 
 #include <glm/glm.hpp>
+#include <glm/gtc/constants.hpp>
 
 #include "Shader.h"
 
@@ -73,6 +74,8 @@ public:
     SpotLight(const std::string& name, glm::vec3 position, glm::vec3 direction, float cutoff, float outerCutoff, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic);
     ~SpotLight();
     void setShader(const Shader& shader, unsigned int index) const;
+    void setPosition(glm::vec3 position);
+    void setDirection(glm::vec3 direction);
 
 private:
     glm::vec3 position_;

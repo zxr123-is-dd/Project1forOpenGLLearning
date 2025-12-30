@@ -22,7 +22,7 @@ unsigned int BaseLight::totalLightCount_ = 0;
 // class DirectLight
 
 DirectLight::DirectLight(const std::string& name, glm::vec3 direction, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular)
-: BaseLight(name, ambient, diffuse, specular, LightType::Direct), direction_(direction) {}
+    : BaseLight(name, ambient, diffuse, specular, LightType::Direct), direction_(direction) {}
 
 DirectLight::~DirectLight() {}
 
@@ -57,13 +57,14 @@ void PointLight::setShader(const Shader& shader, unsigned int index) const {
 // class SpotLight
 
 SpotLight::SpotLight(const std::string& name, glm::vec3 position, glm::vec3 direction, float cutoff, float outerCutoff, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float constant, float linear, float quadratic)
-    : BaseLight(name, ambient, diffuse, specular, LightType::Spot), position_(position), direction_(direction), cutoff_(cutoff), outerCutoff_(outerCutoff), constant_(constant), linear_(linear), quadratic_(quadratic) {}
+    : BaseLight(name, ambient, diffuse, specular, LightType::Spot), position_(position), direction_(direction), cutoff_(glm::cos(cutoff * glm::pi<float>() / 180.0f)), outerCutoff_(glm::cos(outerCutoff * glm::pi<float>() / 180.0f)), constant_(constant), linear_(linear), quadratic_(quadratic) {}
 
 SpotLight::~SpotLight() {}
 
 void SpotLight::setShader(const Shader& shader, unsigned int index) const {
     std::string number = std::to_string(index);
     shader.setUniform<glm::vec3>("spotLights[" + number + "].position", position_);
+    shader.setUniform<glm::vec3>("spotLights[" + number + "].direction", direction_);
     shader.setUniform<glm::vec3>("spotLights[" + number + "].ambient", ambient_ * brightness_);
     shader.setUniform<glm::vec3>("spotLights[" + number + "].diffuse", diffuse_ * brightness_);
     shader.setUniform<glm::vec3>("spotLights[" + number + "].specular", specular_ * brightness_);
@@ -73,6 +74,14 @@ void SpotLight::setShader(const Shader& shader, unsigned int index) const {
     shader.setUniform<float>("spotLights[" + number + "].linear", linear_);
     shader.setUniform<float>("spotLights[" + number + "].quadratic", quadratic_);
     shader.setUniform<bool>("spotLights[" + number + "].available", true);
+}
+
+void SpotLight::setPosition(glm::vec3 position) {
+    position_ = position;
+}
+
+void SpotLight::setDirection(glm::vec3 direction) {
+    direction_ = direction;
 }
 
 // class Lights
@@ -134,10 +143,11 @@ void Lights::setShader(const Shader& shader) const {
             case LightStatus::Blinking: break;
         }
     }
-    for (unsigned int i = pointLights_.size(); i < MAX_DIRECT_LIGHT_COUNT; i++) {
+    for (unsigned int i = pointLights_.size(); i < MAX_POINT_LIGHT_COUNT; i++) {
         setLightOff<PointLight>(shader, i);
     }
     
+    // set SpotLight
     for (unsigned int i = 0; i < spotLights_.size(); i++) {
         switch (spotLights_[i]->getStatus()) {
             case LightStatus::On: spotLights_[i]->setShader(shader, i); break;
@@ -145,7 +155,7 @@ void Lights::setShader(const Shader& shader) const {
             case LightStatus::Blinking: break;
         }
     }
-    for (unsigned int i = spotLights_.size(); i < MAX_DIRECT_LIGHT_COUNT; i++) {
+    for (unsigned int i = spotLights_.size(); i < MAX_SPOT_LIGHT_COUNT; i++) {
         setLightOff<SpotLight>(shader, i);
     }
 }

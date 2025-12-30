@@ -3,9 +3,9 @@
 // public
 
 Mesh::Mesh(std::vector<Vertex>&& vertices, std::vector<unsigned int>&& indices, std::vector<Texture>&& textures)
-	: vertices(vertices), indices(indices), textures(textures) {
+	: vertices(std::move(vertices)), indices(std::move(indices)), textures(std::move(textures)) {
 	setupMesh();
-	// print();
+	print();
 }
 
 Mesh::~Mesh() {
@@ -44,6 +44,9 @@ void Mesh::print() const {
 	std::cout << "Length of indices: " << indices.size() << "\n";
 	std::cout << "Lenght of textures: " << textures.size() << "\n";
 	std::cout << "VAO: " << VAO << " VBO: " << VBO << " EBO: " << EBO << std::endl;
+	for (auto vertex : vertices) {
+		std::cout << vertex.Position.x << " " << vertex.Position.y << " " << vertex.Position.z << "\n";
+	}
 }
 
 // private

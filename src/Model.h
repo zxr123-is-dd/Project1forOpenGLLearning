@@ -14,6 +14,7 @@
 #include <assimp/postprocess.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <stb_image.h>
 
 #include "Mesh.h"
@@ -38,4 +39,4 @@ private:
 	std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::string &typeName);
 };
 
-unsigned int textureFromFile(const char *path, const std::string &directory, bool gamma = false);
+static unsigned int textureFromFile(const char *path, const std::string &directory, bool gamma = false);
