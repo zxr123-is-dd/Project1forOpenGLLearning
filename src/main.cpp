@@ -28,6 +28,8 @@ void mouseCallback(GLFWwindow *window, double xPos, double yPos);
 void processInput(GLFWwindow *window, Camera &camera);
 
 int main(int argc, char **argv) {
+	std::cout << "check on laptop" << std::endl;
+
 	if (!glfwInit()) {
 		std::cout << "Failed to initialize glfw" << std::endl;
 		return -1;
