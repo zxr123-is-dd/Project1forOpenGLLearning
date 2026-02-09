@@ -1,25 +1,27 @@
 #include "Mesh.h"
 
-// public
+//
+// StaticMesh
+//
 
-Mesh::Mesh(std::vector<Vertex>&& vertices, std::vector<unsigned int>&& indices, std::vector<Texture>&& textures)
-	: vertices(std::move(vertices)), indices(std::move(indices)), textures(std::move(textures)) {
-	setupMesh();
+StaticMesh::StaticMesh(std::vector<Vertex>&& vertices, std::vector<unsigned int>&& indices, std::vector<Texture>&& textures)
+	: vertices_(std::move(vertices)), indices_(std::move(indices)), textures_(std::move(textures)) {
+	setup();
 	print();
 }
 
-Mesh::~Mesh() {
+StaticMesh::~StaticMesh() {
 	// std::cout << "Delete Mesh" << std::endl;
 }
 
-void Mesh::draw(const Shader &shader) const {
+void StaticMesh::draw(const Shader &shader) const {
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
-	for (unsigned int i = 0; i < textures.size(); i++) {
+	for (unsigned int i = 0; i < textures_.size(); i++) {
 		glActiveTexture(GL_TEXTURE0 + i);
 
 		std::string number;
-		std::string name = textures[i].type;
+		std::string name = textures_[i].type;
 
 		if (name == "texture_diffuse") {
 			number = std::to_string(diffuseNr++);
@@ -29,29 +31,27 @@ void Mesh::draw(const Shader &shader) const {
 			shader.setUniform<int>("material.specular", i);
 		}
 
-		glBindTexture(GL_TEXTURE_2D, textures[i].id);
+		glBindTexture(GL_TEXTURE_2D, textures_[i].id);
 	}
 	glActiveTexture(GL_TEXTURE0);
 	shader.setUniform<float>("material.shininess", 32.0f);
 
 	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, indices_.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 
-void Mesh::print() const {
-	std::cout << "Length of vertices: " << vertices.size() << "\n";
-	std::cout << "Length of indices: " << indices.size() << "\n";
-	std::cout << "Lenght of textures: " << textures.size() << "\n";
+void StaticMesh::print() const {
+	std::cout << "Length of vertices: " << vertices_.size() << "\n";
+	std::cout << "Length of indices: " << indices_.size() << "\n";
+	std::cout << "Lenght of textures: " << textures_.size() << "\n";
 	std::cout << "VAO: " << VAO << " VBO: " << VBO << " EBO: " << EBO << std::endl;
-	for (auto vertex : vertices) {
+	for (auto vertex : vertices_) {
 		std::cout << vertex.Position.x << " " << vertex.Position.y << " " << vertex.Position.z << "\n";
 	}
 }
 
-// private
-
-void Mesh::setupMesh() {
+void StaticMesh::setup() {
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
@@ -59,10 +59,10 @@ void Mesh::setupMesh() {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices_.size() * sizeof(Vertex), vertices_.data(), GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_.size() * sizeof(unsigned int), indices_.data(), GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Position));
@@ -75,3 +75,12 @@ void Mesh::setupMesh() {
 
 	glBindVertexArray(0);
 }
+
+//
+// CollisionMesh
+//
+
+CollisionMesh::CollisionMesh(std::vector<glm::vec3>&& vertices, std::vector<unsigned int>&& indices)
+	: vertices_(std::move(vertices_)), indices_(std::move(indices)) {}
+
+CollisionMesh::~CollisionMesh() {}

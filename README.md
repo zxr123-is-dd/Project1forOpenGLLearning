@@ -2,7 +2,7 @@
 
 这个项目是为了学习OpenGL。
 
-## 注意:
+## 编译须知:
 
 ### 在 Windows 下:
 
@@ -22,17 +22,20 @@ https://sirlis.cn/posts/windows-mingw64-assimp/
 使用依赖库:
 ```
 # Fedora
-glfw-devel assimp-devel mesa-libGL-devel mesa-libGLU-devel
+glfw-devel assimp-devel mesa-libGL-devel mesa-libGLU-devel libXi-devel
 
 # Ubuntu
-libglfw3-dev libassimp-dev libgl1-mesa-dev libglu1-mesa-dev
+libglfw3-dev libassimp-dev libgl1-mesa-dev libglu1-mesa-dev libxi-dev
 ```
+
+## 设计文档
+请在``docs``文件夹下查看``Design Document (cn)``。
 
 # Introduction
 
 This is a project for OpenGL learning.
 
-## Notice:
+## Compilation Notes:
 
 ### Windows
 
@@ -57,3 +60,7 @@ glfw-devel assimp-devel mesa-libGL-devel mesa-libGLU-devel
 # Ubuntu
 libglfw3-dev libassimp-dev libgl1-mesa-dev libglu1-mesa-dev
 ```
+
+## Designed Document
+
+Pleace check the ``docs`` folder for ``Design Document (en)``.

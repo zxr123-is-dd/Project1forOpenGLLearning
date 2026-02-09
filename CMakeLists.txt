@@ -54,6 +54,9 @@ else()
     endif()
 endif()
 
+# include
+set(INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
+
 # src
 aux_source_directory("${CMAKE_CURRENT_SOURCE_DIR}/src" SRC_DIR)
 
@@ -69,6 +72,7 @@ target_include_directories(demo
     ${GLAD_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
     ${STB_IMAGE_INCLUDE_DIR}
+    ${INCLUDE_DIR}
 )
 
 if(WIN32)

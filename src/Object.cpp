@@ -1,5 +1,9 @@
 #include "Object.h"
 
+//
+// Object
+//
+
 Object::Object(std::shared_ptr<Model> model, glm::vec3 position, glm::vec3 scale) 
     : model_(model), position_(position), scale_(scale) {}
 
@@ -22,4 +26,17 @@ void Object::draw(const Shader& shader, const Camera& camera) const {
     shader.setUniform<glm::vec3>("viewPos", camera.getPosition());
 
     model_->draw(shader);
+}
+
+//
+// Humanoid
+//
+
+Humanoid::Humanoid(std::shared_ptr<Model> model, glm::vec3 pos, glm::vec3 scale = glm::vec3(1.0f), const Capsule &capsule)
+    : Object(model, pos, scale), capsule_(capsule), speed_(glm::vec3(0.0f)), isGravity_(true) {}
+
+Humanoid::~Humanoid() {}
+
+void Humanoid::checkIntersects(const std::vector<Object> &objects) {
+    
 }

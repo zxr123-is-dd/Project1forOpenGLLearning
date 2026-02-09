@@ -15,6 +15,7 @@
 #include "Camera.h"
 #include "Object.h"
 #include "Light.h"
+#include "Physics.h"
 
 constexpr unsigned int screenWidth = 1920;
 constexpr unsigned int screenHeight = 1080;
@@ -22,12 +23,11 @@ constexpr unsigned int screenHeight = 1080;
 glm::vec2 mouseOffset = glm::vec2(0.0f);
 float mouseSensitivity = 1.25f;
 
-void framebufferSizeCallback(GLFWwindow* window, int width, int height);
-void mouseCallback(GLFWwindow* window, double xPos, double yPos);
-void processInput(GLFWwindow* window, Camera& camera);
+void framebufferSizeCallback(GLFWwindow *window, int width, int height);
+void mouseCallback(GLFWwindow *window, double xPos, double yPos);
+void processInput(GLFWwindow *window, Camera &camera);
 
-int main(int argc, char** argv) {
-	// Initalization
+int main(int argc, char **argv) {
 	if (!glfwInit()) {
 		std::cout << "Failed to initialize glfw" << std::endl;
 		return -1;
@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "Demo 0.3", NULL, NULL);
+	GLFWwindow *window = glfwCreateWindow(screenWidth, screenHeight, "Demo 0.3", NULL, NULL);
 	if (window == NULL) {
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
@@ -62,7 +62,6 @@ int main(int argc, char** argv) {
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 	std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 
-	// 
 	Camera camera(glm::vec3(0.0f, 0.0f, 5.0f), -90.0f, 0.0f, screenWidth, screenHeight, 45.0f, 500.0f);
 	Shader shader("../res/shaders/shader.vert", "../res/shaders/shader.frag");
 	// auto ourModel = std::make_shared<Model>("../res/models/backpack/backpack.obj");
@@ -116,11 +115,11 @@ int main(int argc, char** argv) {
 	return 0;
 }
 
-void framebufferSizeCallback(GLFWwindow* window, int width, int height) {
+void framebufferSizeCallback(GLFWwindow *window, int width, int height) {
 	glViewport(0, 0, width, height);
 }
 
-void mouseCallback(GLFWwindow* window, double xPos, double yPos) {
+void mouseCallback(GLFWwindow *window, double xPos, double yPos) {
 	static bool firstMouse = true;
 	static float lastPosX;
 	static float lastPosY;
@@ -131,14 +130,14 @@ void mouseCallback(GLFWwindow* window, double xPos, double yPos) {
 		firstMouse = false;
 	}
 
-	mouseOffset.x = (xPos - lastPosX) * mouseSensitivity;
-	mouseOffset.y = (lastPosY - yPos) * mouseSensitivity;
+	mouseOffset.x = (xPos - lastPosX)  *mouseSensitivity;
+	mouseOffset.y = (lastPosY - yPos)  *mouseSensitivity;
 
 	lastPosX = xPos;
 	lastPosY = yPos;
 }
 
-void processInput(GLFWwindow* window, Camera& camera) {
+void processInput(GLFWwindow *window, Camera& camera) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 	}
@@ -147,22 +146,22 @@ void processInput(GLFWwindow* window, Camera& camera) {
 	constexpr float cameraSpeed = 0.04f;
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		posOffset += glm::normalize(glm::cross(camera.getUp(), glm::cross(camera.getFront(), camera.getUp()))) * cameraSpeed;
+		posOffset += glm::normalize(glm::cross(camera.getUp(), glm::cross(camera.getFront(), camera.getUp())))  *cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-		posOffset -= glm::normalize(glm::cross(camera.getUp(), glm::cross(camera.getFront(), camera.getUp()))) * cameraSpeed;
+		posOffset -= glm::normalize(glm::cross(camera.getUp(), glm::cross(camera.getFront(), camera.getUp())))  *cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		posOffset -= glm::normalize(glm::cross(camera.getFront(), camera.getUp())) * cameraSpeed;
+		posOffset -= glm::normalize(glm::cross(camera.getFront(), camera.getUp()))  *cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		posOffset += glm::normalize(glm::cross(camera.getFront(), camera.getUp())) * cameraSpeed;
+		posOffset += glm::normalize(glm::cross(camera.getFront(), camera.getUp()))  *cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-		posOffset += camera.getUp() * cameraSpeed;
+		posOffset += camera.getUp()  *cameraSpeed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-		posOffset -= camera.getUp() * cameraSpeed;
+		posOffset -= camera.getUp()  *cameraSpeed;
 	}
 
 	camera.movePosition(posOffset);

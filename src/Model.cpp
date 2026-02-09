@@ -11,7 +11,7 @@ Model::~Model() {
 }
 
 void Model::draw(const Shader& shader) {
-	for (const auto& mesh : meshes) {
+	for (const auto &mesh : staticMeshes_) {
 		mesh.draw(shader);
 	}
 }
@@ -32,7 +32,7 @@ void Model::loadModel(const std::string &path) {
 		std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
 		return;
 	}
-	directory = path.substr(0, path.find_last_of('/'));
+	directory_ = path.substr(0, path.find_last_of('/'));
 
 	processNode(scene->mRootNode, scene);
 }
@@ -40,7 +40,16 @@ void Model::loadModel(const std::string &path) {
 void Model::processNode(aiNode *node, const aiScene *scene) {
 	for (unsigned int i = 0; i < node->mNumMeshes; i++) {
 		aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-		meshes.push_back(processMesh(mesh, scene));
+		std::string name = mesh->mName.C_Str();
+		if (name.size() >= 3 && name.substr(0, 3) == "SM_") {
+			staticMeshes_.push_back(processStaticMesh(mesh, scene));	
+		} else if (name.size() >= 4 && name.substr(0, 4) == "UCX_") {
+			collisionMeshes_.push_back(processCollisionMesh(mesh));
+		} else if (name.size() >= 3 && name.substr(0, 4) == "MC_") {
+			collisionMeshes_.push_back(processCollisionMesh(mesh));
+		} else {
+			std::cout << "Can't recognize the kind of this mesh" << std::endl;
+		}
 	}
 
 	for (unsigned int i = 0; i < node->mNumChildren; i++) {
@@ -48,7 +57,7 @@ void Model::processNode(aiNode *node, const aiScene *scene) {
 	}
 }
 
-Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
+StaticMesh Model::processStaticMesh(aiMesh *mesh, const aiScene *scene) {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 	std::vector<Texture> textures;
@@ -96,7 +105,29 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene) {
 		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	}
 
-	return Mesh(std::move(vertices), std::move(indices), std::move(textures));
+	return StaticMesh(std::move(vertices), std::move(indices), std::move(textures));
+}
+
+CollisionMesh Model::processCollisionMesh(aiMesh *mesh) {
+	std::vector<glm::vec3> vertices;
+	std::vector<unsigned int> indices;
+
+	for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
+		vertices.push_back(glm::vec3(
+			mesh->mVertices[i].x,
+			mesh->mVertices[i].y,
+			mesh->mVertices[i].z
+		));
+	}
+
+	for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
+		aiFace face = mesh->mFaces[i];
+		for (unsigned int j = 0; j < face.mNumIndices; j++) {
+			indices.push_back(face.mIndices[j]);
+		}
+	}
+
+	return CollisionMesh(std::move(vertices), std::move(indices));
 }
 
 std::vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType type, const std::string &typeName) {
@@ -107,9 +138,9 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType 
 		mat->GetTexture(type, i, &str);
 
 		bool skip = false;
-		for (unsigned int j = 0; j < texturesLoaded.size(); j++) {
-			if (std::strcmp(texturesLoaded[j].path.C_Str(), str.C_Str()) == 0) {
-				textures.push_back(texturesLoaded[j]);
+		for (unsigned int j = 0; j < texturesLoaded_.size(); j++) {
+			if (std::strcmp(texturesLoaded_[j].path.C_Str(), str.C_Str()) == 0) {
+				textures.push_back(texturesLoaded_[j]);
 				skip = true;
 				break;
 			}
@@ -117,12 +148,12 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial *mat, aiTextureType 
 
 		if (!skip) {
 			Texture texture;
-			texture.id = textureFromFile(str.C_Str(), directory, false);
+			texture.id = textureFromFile(str.C_Str(), directory_, false);
 			texture.type = typeName;
 			texture.path = str.C_Str();
 
 			textures.push_back(texture);
-			texturesLoaded.push_back(texture);
+			texturesLoaded_.push_back(texture);
 		}
 	}
 
