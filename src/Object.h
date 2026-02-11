@@ -28,15 +28,15 @@ protected:
 
 
 
-class Humanoid : public Object {
-public:
-    Humanoid(std::shared_ptr<Model> model, glm::vec3 pos, glm::vec3 scale = glm::vec3(1.0f), const Capsule &capsule);
-    ~Humanoid();
+// class Humanoid : public Object {
+// public:
+//     Humanoid(std::shared_ptr<Model> model, glm::vec3 pos, glm::vec3 scale = glm::vec3(1.0f), const Capsule &capsule);
+//     ~Humanoid();
 
-    void checkIntersects(const std::vector<Object> &objects);
+//     void checkIntersects(const std::vector<Object> &objects);
 
-private:
-    Capsule capsule_;
-    glm::vec3 speed_;
-    bool isGravity_;
-};
+// private:
+//     Capsule capsule_;
+//     glm::vec3 speed_;
+//     bool isGravity_;
+// };

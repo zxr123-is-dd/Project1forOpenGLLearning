@@ -8,6 +8,10 @@ Functions such as mathematical calculations amd model loading used libraries suc
 
 Other functions such as lighting and physics, were implemented manually.
 
+"S_" means system
+
+"C_" means compenent
+
 ## Functions
 
 ### Object (Object.h)

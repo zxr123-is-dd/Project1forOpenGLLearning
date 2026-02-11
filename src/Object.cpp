@@ -32,11 +32,11 @@ void Object::draw(const Shader& shader, const Camera& camera) const {
 // Humanoid
 //
 
-Humanoid::Humanoid(std::shared_ptr<Model> model, glm::vec3 pos, glm::vec3 scale = glm::vec3(1.0f), const Capsule &capsule)
-    : Object(model, pos, scale), capsule_(capsule), speed_(glm::vec3(0.0f)), isGravity_(true) {}
+// Humanoid::Humanoid(std::shared_ptr<Model> model, glm::vec3 pos, glm::vec3 scale = glm::vec3(1.0f), const Capsule &capsule)
+//     : Object(model, pos, scale), capsule_(capsule), speed_(glm::vec3(0.0f)), isGravity_(true) {}
 
-Humanoid::~Humanoid() {}
+// Humanoid::~Humanoid() {}
 
-void Humanoid::checkIntersects(const std::vector<Object> &objects) {
+// void Humanoid::checkIntersects(const std::vector<Object> &objects) {
     
-}
+// }

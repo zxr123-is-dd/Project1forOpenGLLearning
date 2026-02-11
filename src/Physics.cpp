@@ -148,7 +148,7 @@ float distanceSqSegmentTriangle(
             e2 = e4;
         }
 
-        float dNow = distanceSqSegmentSegment(p, q, b, c, e3, e4);
+        dNow = distanceSqSegmentSegment(p, q, b, c, e3, e4);
         if (dNow < dMin) {
             dMin = dNow;
             e1 = e3;
