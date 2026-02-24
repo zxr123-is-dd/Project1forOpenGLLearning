@@ -1,15 +1,15 @@
-#include "System/S_Window.h"
+#include "Window.hpp"
 
 #include <iostream>
 
-S_Window::S_Window()
+WindowSystem::WindowSystem()
     : window_(NULL) {}
 
-S_Window::~S_Window() {
+WindowSystem::~WindowSystem() {
     glfwTerminate();
 }
 
-bool S_Window::init(int width, int height, const std::string &title) {
+bool WindowSystem::Init(int width, int height, const std::string &title) {
     if (!glfwInit()) {
         std::cout << "Failed to initialize glfw" << std::endl;
         return false;
@@ -46,25 +46,28 @@ bool S_Window::init(int width, int height, const std::string &title) {
     return true;
 }
 
-glm::vec2 S_Window::getMouseOffset() const {
-    return glm::vec2(cameraData_->offsetX, cameraData_->offsetY);
-}
-
-bool S_Window::isRunning() const {
+bool WindowSystem::IsRunning() const {
     return !glfwWindowShouldClose(window_);
 }
 
-void S_Window::processInput() {
+void WindowSystem::ProcessInput() {
 }
 
-void S_Window::clear() const {
+void WindowSystem::Clear() const {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void S_Window::output() const {
+void WindowSystem::SwapBuffers() const {
     glfwSwapBuffers(window_);
+}
+
+void WindowSystem::PollEvents() const {
     glfwPollEvents();
+}
+
+glm::vec2 WindowSystem::GetMouseOffset() const {
+    return glm::vec2(cameraData_->offsetX, cameraData_->offsetY);
 }
 
 void framebufferSizeCallback(GLFWwindow *window, int width, int height) {

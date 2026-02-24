@@ -57,15 +57,7 @@ endif()
 # src
 set(SRC_SOURCE
     src/main.cpp
-    src/Camera.cpp
-    src/Light.cpp
-    src/Mesh.cpp
-    src/Model.cpp
-    src/Object.cpp
-    src/Physics.cpp
-    src/Shader.cpp
-    src/System/S_Window.cpp
-    # src/System/S_Game.cpp
+    src/Window.cpp
 )
 
 #build
@@ -81,7 +73,6 @@ target_include_directories(demo
     ${GLM_INCLUDE_DIR}
     ${STB_IMAGE_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    
 )
 
 if(WIN32)

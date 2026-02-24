@@ -23,6 +23,21 @@ enum LightType {
     Spot
 };
 
+struct BaseLight {
+    std::string name_;
+    unsigned int id_;
+    glm::vec3 ambient_;
+	glm::vec3 diffuse_;
+	glm::vec3 specular_;
+    LightStatus status_;
+    float bright_;
+    LightType type_;
+};
+
+struct DirectLight : BaseLight {
+    glm::vec3 direct_;
+};
+
 class BaseLight {
 public:
     BaseLight(const std::string& name, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, LightType type);

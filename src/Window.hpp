@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+
 #include <string>
 
 struct CameraData {
@@ -11,22 +12,21 @@ struct CameraData {
     float sensitivity;
 };
 
-class S_Window {
-public:
-    S_Window();
-    ~S_Window();
-    
-    bool init(int width, int height, const std::string &title);
-    bool isRunning() const;
-    void processInput();
-    void clear() const;
-    void output() const;
-
-    glm::vec2 getMouseOffset() const;
-private:
+class WindowSystem {
     GLFWwindow *window_;
     CameraData *cameraData_;
+public:
+    WindowSystem();
+    ~WindowSystem();
     
+    bool Init(int width, int height, const std::string &title);
+    bool IsRunning() const;
+    void ProcessInput();
+    void Clear() const;
+    void SwapBuffers() const;
+    void PollEvents() const;
+
+    glm::vec2 GetMouseOffset() const;
 };
 
 void framebufferSizeCallback(GLFWwindow *window, int width, int height);
