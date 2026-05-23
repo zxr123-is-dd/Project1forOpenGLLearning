@@ -54,17 +54,22 @@ else()
     endif()
 endif()
 
+# include
+set(INCLUDE_DIR
+    include
+)
+
 # src
-set(SRC_SOURCE
+set(SRC
     src/main.cpp
-    src/Window.cpp
+    src/system/WindowManager.cpp
 )
 
 #build
 add_executable(demo
     ${GLAD_SOURCE}
     ${STB_IMAGE_SOURCE}
-    ${SRC_SOURCE}
+    ${SRC}
 )
 
 target_include_directories(demo 
@@ -72,7 +77,7 @@ target_include_directories(demo
     ${GLAD_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
     ${STB_IMAGE_INCLUDE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${INCLUDE_DIR}
 )
 
 if(WIN32)
