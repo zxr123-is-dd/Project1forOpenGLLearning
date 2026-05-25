@@ -2,3 +2,5 @@ build/
 build.sh
 .vscode
 src-old
+external/assimp/
+bin/

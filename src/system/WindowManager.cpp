@@ -48,6 +48,12 @@ void WindowManager::pollEvents() const {
     glfwPollEvents();
 }
 
+void WindowManager::processInput() const {
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, true);
+    }
+}
+
 void WindowManager::cleanUp() {
     if (window) {
         glfwDestroyWindow(window);

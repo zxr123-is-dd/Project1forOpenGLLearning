@@ -16,6 +16,7 @@ public:
     bool windowShouldClose() const;
     void swapBuffers() const;
     void pollEvents() const;
+    void processInput() const;
 
 private:
     GLFWwindow* window;
