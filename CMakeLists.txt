@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
-
 project(OpenGLDemo)
 
-# cpp/c configure
 set(CMAKE_CXX_COMPILER "g++")
 set(CMAKE_C_COMPILER "gcc")
 
@@ -12,35 +10,37 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-# OpenGL
+add_compile_options(-Wall -Wextra)
+
 find_package(OpenGL REQUIRED)
 
-set(EXTERNAL_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external/include)
-set(GLFW_LIBRARY         ${CMAKE_CURRENT_SOURCE_DIR}/external/lib/libglfw3.a)
-set(EXTERNAL_SRC
+add_library(engine_deps STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/external/src/glad.c
     ${CMAKE_CURRENT_SOURCE_DIR}/external/src/stb_image.cpp
 )
+target_include_directories(engine_deps SYSTEM PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/include
+)
+target_link_libraries(engine_deps PUBLIC
+    OpenGL::GL
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/lib/libglfw3.a
+)
 
-set(INCLUDE_DIR include)
-
-set(SRC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+add_library(engine_core STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/system/WindowManager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/render/Model.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/render/ModelManager.cpp
+)
+target_include_directories(engine_core PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+target_link_libraries(engine_core PUBLIC
+    engine_deps
 )
 
 add_executable(demo
-    ${EXTERNAL_SRC}
-    ${SRC}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
 )
-
-target_include_directories(demo 
-    PRIVATE
-    ${EXTERNAL_INCLUDE_DIR}
-    ${INCLUDE_DIR}
-)
-
 target_link_libraries(demo PRIVATE
-    OpenGL::GL
-    ${GLFW_LIBRARY}
+    engine_core
 )

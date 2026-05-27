@@ -1,47 +1,48 @@
 #include "system/WindowManager.hpp"
 
 #include <iostream>
-#include <functional>
+#include "system/Logger.hpp"
 
-WindowManager::WindowManager() : window(nullptr) {}
+WindowManager::WindowManager() {}
 
 WindowManager::~WindowManager() {
     cleanUp();
 }
 
 bool WindowManager::init(int height, int width, const std::string& windowTitle) {
-    this->height = height;
-    this->width = width;
+    height_ = height;
+    width_  = width;
 
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(height, width, windowTitle.c_str(), NULL, NULL);
-    if (window == NULL) {
-        std::cout << "Failed to create GLFW window" << std::endl;
+    window_ = glfwCreateWindow(height, width, windowTitle.c_str(), NULL, NULL);
+    if (window_ == NULL) {
+        Logger::error("Failed to create GLFW window");
         glfwTerminate();
         return false;
     }
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+    glfwMakeContextCurrent(window_);
+    glfwSetFramebufferSizeCallback(window_, framebufferSizeCallback);
     
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        Logger::error("Failed to initialize GLAD");
         return false;
     }
     glViewport(0, 0, height, width);
     
+    Logger::info("GLFW and GLAD are loaded successfully");
     return true;
 }
 
 bool WindowManager::windowShouldClose() const {
-    return glfwWindowShouldClose(window);
+    return glfwWindowShouldClose(window_);
 }
 
 void WindowManager::swapBuffers() const {
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(window_);
 }
 
 void WindowManager::pollEvents() const {
@@ -49,14 +50,14 @@ void WindowManager::pollEvents() const {
 }
 
 void WindowManager::processInput() const {
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, true);
+    if(glfwGetKey(window_, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window_, true);
     }
 }
 
 void WindowManager::cleanUp() {
-    if (window) {
-        glfwDestroyWindow(window);
+    if (window_) {
+        glfwDestroyWindow(window_);
     }
     glfwTerminate();
 }

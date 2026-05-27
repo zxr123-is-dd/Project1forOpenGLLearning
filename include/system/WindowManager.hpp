@@ -19,9 +19,9 @@ public:
     void processInput() const;
 
 private:
-    GLFWwindow* window;
-    int height;
-    int width;
+    GLFWwindow* window_{ nullptr };
+    int height_{ 0 };
+    int width_{ 0 };
 
     inline static bool isGLFWInitalized = false;
 
